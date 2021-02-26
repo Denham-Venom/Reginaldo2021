@@ -40,7 +40,7 @@ public final class Constants
 	public static final double DT_HGT = 0.9;
 	public static final double DT_LG = 0.8;
 	public static final double DT_LGT = 0.65;
-	public static final int FEET_TO_ROT_UNITS = 0;
+	public static final double FEET_TO_ROT_UNITS = (2048) * (50 / 24) * (2 / Math.PI);//(Ticks per rev) * (gear ratio) / (rev/ft)  c=6pi in = pi/2 ft
 	public static final int kTimeoutMS = 30;
 	public static final int kPIDLoopIdx = 0;
 	public static final int SHOOT_MOTOR_LEFT_ID = 5;
@@ -49,7 +49,7 @@ public final class Constants
 	public static final int kSlotIdx = 0;
 	public static final int ADJUST_ANGLE_MOTOR_LEFT = 11; // spark #3
 	public static final int ADJUST_ANGLE_MOTOR_RIGHT = 9; // spark #4
-	public static final double FEEDFORWARD = 0.008;
+	public static final double FEEDFORWARD = 0.009;
 	public static final double ANGLE_MOTOR_SPEED = 0.1;
 	public static final double SHOOTER_MOTOR_SPEED = 0.7;
 	public static final int INTAKE_MOTOR_ID = 10; // spark #1
@@ -57,8 +57,9 @@ public final class Constants
 	public static final int INDEXER_MOTOR_2 = 8; //Right
 	public static final int SPIN_UP_MOTOR = 12; // spark #2
 	public static final double INDEXER_SPEED = 1;
-	public static final double SPIN_UP_SPEED = 0.7;
+	public static final double SPIN_UP_SPEED = 0.8;
 	public static final double INTAKE_BALL_SPEED = 0.9;
+	public static final double allowableCloseLoopError = 0;
 
 //------------------------------------------------------
 }

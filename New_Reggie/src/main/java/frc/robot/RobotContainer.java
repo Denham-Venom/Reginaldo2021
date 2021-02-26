@@ -45,7 +45,6 @@ public class RobotContainer {
   private final DriveTrain drivetrain = new DriveTrain();
   private final Shooter shooter = new Shooter();
   private final Intake intake = new Intake();
-  private final Indexer index = new Indexer();
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -62,18 +61,20 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    xButton.toggleWhenPressed(new InstantCommand(intake::toggleIntake));
+    xButton.whenPressed(new InstantCommand(intake::toggleIntake));
     aButton.whenPressed(new InstantCommand(drivetrain::invertDrive, drivetrain));
     bButton.whenPressed(new InstantCommand(drivetrain::hLGearSwitch, drivetrain));
-    rtButton.whileHeld(new IntakeBall(intake, Constants.INTAKE_BALL_SPEED));
+    rtButton.whenHeld(new IntakeBall(intake, Constants.INTAKE_BALL_SPEED));
+    rbButton.whileHeld(new StartEndCommand(() -> intake.setSpinUpMotor(Constants.SPIN_UP_SPEED), () -> intake.setSpinUpMotor(0)));
+    lbButton.whileHeld(new StartEndCommand(() -> intake.setSpinUpMotor(-Constants.SPIN_UP_SPEED), () -> intake.setSpinUpMotor(0)));
 
-    ltButton2.whileHeld(new IntakeBall(intake, -Constants.INTAKE_BALL_SPEED));
-    rtButton2.whileHeld(new IntakeBall(intake, Constants.INTAKE_BALL_SPEED));
+    ltButton2.whenHeld(new IntakeBall(intake, -Constants.INTAKE_BALL_SPEED));
+    rtButton2.whenHeld(new IntakeBall(intake, Constants.INTAKE_BALL_SPEED));
     bButton2.whileHeld(new ShooterAngle(shooter, -Constants.ANGLE_MOTOR_SPEED));
     aButton2.whileHeld(new ShooterAngle(shooter, Constants.ANGLE_MOTOR_SPEED));
-    xButton2.whileHeld(new StartEndCommand(() -> index.setSpinUpMotor(-Constants.SPIN_UP_SPEED), () -> index.setSpinUpMotor(0), index));
-    rbButton2.whileHeld(new Shoot(shooter));
-    lbButton2.whileHeld(new Index(index));
+    yButton2.whenHeld(new StartEndCommand(() -> drivetrain.setWithPostion(), () -> drivetrain.stopMotors(), drivetrain));
+    xButton2.whenHeld(new ShootAndIndex(intake, shooter));
+    lbButton2.whileHeld(new StartEndCommand(() -> intake.setIndexerMotor(Constants.INDEXER_SPEED), () -> intake.setIndexerMotor(0)));
   }
 
   private void setDefaultCommands() {

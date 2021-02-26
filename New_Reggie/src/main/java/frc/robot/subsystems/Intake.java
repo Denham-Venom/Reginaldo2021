@@ -7,6 +7,8 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -17,13 +19,19 @@ import frc.robot.Constants;
 public class Intake extends SubsystemBase {
   private final CANSparkMax intakeMotor = new CANSparkMax(Constants.INTAKE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
   public final DoubleSolenoid intakeDoubleSolenoid = new DoubleSolenoid(0, 1);
+  private final VictorSPX indexerMotor1 = new VictorSPX(Constants.INDEXER_MOTOR_1);
+  private final VictorSPX indexerMotor2 = new VictorSPX(Constants.INDEXER_MOTOR_2);
+  private final CANSparkMax spinUpMotor = new CANSparkMax(Constants.SPIN_UP_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless);
   private boolean extended = false;
   /**
    * Creates a new Intake.
    */
   
   public Intake() {
+    intakeMotor.restoreFactoryDefaults();
+    intakeMotor.setInverted(true);
     intakeDoubleSolenoid.set(Value.kReverse);
+    spinUpMotor.setInverted(true);
   }
 
   public void toggleIntake() {
@@ -51,10 +59,21 @@ public class Intake extends SubsystemBase {
 
   public void setIntakeMotor(double speed) {
     // sets the intake motor to the given speed
-      intakeMotor.set(speed);
+    intakeMotor.set(speed);
   }
 
-public double getIntakeRPM() {
-	return 0;
-}
+  public void setIndexerMotor(double speed) {
+    // sets the speed for the index motors
+    indexerMotor1.set(ControlMode.PercentOutput, speed);
+    indexerMotor2.set(ControlMode.PercentOutput, speed);
+  }
+
+  public void setSpinUpMotor(double speed) {
+    // sets the speed of the spinup motor
+    spinUpMotor.set(speed);
+  }
+
+  public double getIntakeRPM() {
+    return 0;
+  }
 }

@@ -20,7 +20,7 @@ public class IntakeBall extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
     this.intake = intake;
     this.speed = speed;
-    addRequirements(intake);
+    //addRequirements(intake);
   }
 
   // Called when the command is initially scheduled.

@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
@@ -32,12 +33,17 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setShooterMotors(double speed) {
-    shootMotorLeft.set(ControlMode.PercentOutput, -speed);
-    shootMotorRight.set(ControlMode.PercentOutput, speed);
+    shootMotorLeft.set(ControlMode.PercentOutput, speed);
   }
 
   private void configShoot() {
     shootMotorLeft.configFactoryDefault();
+    shootMotorRight.configFactoryDefault();
+
+    shootMotorRight.follow(shootMotorLeft);
+
+    shootMotorLeft.setInverted(true);
+    shootMotorRight.setInverted(TalonFXInvertType.OpposeMaster);
 
     shootMotorLeft.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, Constants.kTimeoutMS);
 
@@ -58,6 +64,9 @@ public class Shooter extends SubsystemBase {
 
     adjustAngleMotorRight.restoreFactoryDefaults();
     adjustAngleMotorRight.setInverted(false);
+
+    shootMotorLeft.configOpenloopRamp(0.1);
+    shootMotorLeft.configClosedloopRamp(0);
   }
 
   @Override
