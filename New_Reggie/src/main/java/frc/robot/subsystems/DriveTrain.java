@@ -10,19 +10,24 @@ import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class DriveTrain extends SubsystemBase {
-  
+
   private TalonFX motorTopLeft = new TalonFX(Constants.MOTOR_TOP_LEFT_ID);
   private TalonFX motorBottomLeft = new TalonFX(Constants.MOTOR_BOTTOM_LEFT_ID);
   private TalonFX motorTopRight = new TalonFX(Constants.MOTOR_TOP_RIGHT_ID);
   private TalonFX motorBottomRight = new TalonFX(Constants.MOTOR_BOTTON_RIGHT_ID);
 
+  // private double maxMPVelocity;
+  // private double maxMPAcceleration;
   private double feet;
   private double f;
   private double p;
@@ -34,6 +39,12 @@ public class DriveTrain extends SubsystemBase {
   private double highGearTurn = Constants.DT_HGT;// .9;
   private double lowGear = Constants.DT_LG;// 0.8;
   private double lowGearTurn = Constants.DT_LGT;// 0.65;
+
+  // TrapezoidProfile.Constraints MPconstraints = new TrapezoidProfile.Constraints(maxMPVelocity, maxMPAcceleration);
+  // TrapezoidProfile.State MPgoal = new TrapezoidProfile.State();
+  // TrapezoidProfile.State MPsetpoint = new TrapezoidProfile.State();
+  // TrapezoidProfile profile = new TrapezoidProfile(MPconstraints, MPsetpoint, MPgoal);
+  // ProfiledPIDController pidController = new ProfiledPIDController(movementP, movementI, movementD, MPconstraints);
 
   private static ShuffleboardTab tuning = Shuffleboard.getTab("Tuning");
   static final NetworkTableEntry movementF = tuning.add("Movement F", 0).getEntry();
@@ -157,7 +168,13 @@ public class DriveTrain extends SubsystemBase {
     return feet * Constants.FEET_TO_ROT_UNITS;
   }
 
-  
+  // public void goToStart() {
+  //   pidController.setGoal(0);
+  // }
+
+  // public void goToEnd() {
+  //   pidController.setGoal(5);
+  // }
 
   public void invertDrive() {
     inverted = !inverted;
