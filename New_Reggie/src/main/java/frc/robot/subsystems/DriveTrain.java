@@ -16,6 +16,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+
 public class DriveTrain extends SubsystemBase {
   
   private TalonFX motorTopLeft = new TalonFX(Constants.MOTOR_TOP_LEFT_ID);
@@ -35,12 +38,17 @@ public class DriveTrain extends SubsystemBase {
   private double lowGear = Constants.DT_LG;// 0.8;
   private double lowGearTurn = Constants.DT_LGT;// 0.65;
 
+
+  
+
   private static ShuffleboardTab tuning = Shuffleboard.getTab("Tuning");
   static final NetworkTableEntry movementF = tuning.add("Movement F", 0).getEntry();
   static final NetworkTableEntry movementP = tuning.add("Movement P", 0).getEntry();
   static final NetworkTableEntry movementI = tuning.add("Movement I", 0).getEntry();
   static final NetworkTableEntry movementD = tuning.add("Movement D", 0).getEntry();
   static final NetworkTableEntry movementFeet = tuning.add("Amount to move in Feet", 0).getEntry();
+  //-----------------------------------------------------------------------------------------------
+  
 
   /** Creates a new DriveTrain. */
   public DriveTrain() {

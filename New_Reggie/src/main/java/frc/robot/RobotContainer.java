@@ -67,6 +67,9 @@ public class RobotContainer {
     rtButton.whenHeld(new IntakeBall(intake, Constants.INTAKE_BALL_SPEED));
     rbButton.whileHeld(new StartEndCommand(() -> intake.setSpinUpMotor(Constants.SPIN_UP_SPEED), () -> intake.setSpinUpMotor(0)));
     lbButton.whileHeld(new StartEndCommand(() -> intake.setSpinUpMotor(-Constants.SPIN_UP_SPEED), () -> intake.setSpinUpMotor(0)));
+    
+    yButton.whenHeld(new AimAndShoot(drivetrain, shooter));
+
 
     ltButton2.whenHeld(new IntakeBall(intake, -Constants.INTAKE_BALL_SPEED));
     rtButton2.whenHeld(new IntakeBall(intake, Constants.INTAKE_BALL_SPEED));

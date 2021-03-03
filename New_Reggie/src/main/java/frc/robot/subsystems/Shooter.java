@@ -8,9 +8,15 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -22,9 +28,19 @@ public class Shooter extends SubsystemBase {
   private final TalonFX shootMotorRight = new TalonFX(Constants.SHOOT_MOTOR_RIGHT_ID);
   private final CANSparkMax adjustAngleMotorLeft = new CANSparkMax(Constants.ADJUST_ANGLE_MOTOR_LEFT, CANSparkMaxLowLevel.MotorType.kBrushless);
   private final CANSparkMax adjustAngleMotorRight = new CANSparkMax(Constants.ADJUST_ANGLE_MOTOR_RIGHT, CANSparkMaxLowLevel.MotorType.kBrushless);
+  public final CANEncoder angleEncoder = adjustAngleMotorLeft.getEncoder();
+//---------------------------------------------------------------
 
   public Shooter() {
     configShoot();
+  }
+
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
+    //ff = SmartDashboard.getEntry("Feedforward Shooter").getDouble(0);
+    
+    SmartDashboard.putNumber("Shooter Angle", angleEncoder.getPosition());
   }
 
   public void setAngleMotor(double speed) {
@@ -34,6 +50,37 @@ public class Shooter extends SubsystemBase {
 
   public void setShooterMotors(double speed) {
     shootMotorLeft.set(ControlMode.PercentOutput, speed);
+  }
+
+  public void setAngleMotorsSafe(double output) {
+    if(angleEncoder.getPosition() < 1)
+    {
+      if(output < 0) 
+      {
+        setAngleMotor(0);
+        return;
+      } 
+      else 
+      {
+        setAngleMotor(output);
+      }
+    } 
+    else if(angleEncoder.getPosition() > 29)
+    {
+      if(output > 0) 
+      {
+        setAngleMotor(0);
+        return;
+      }
+      else 
+      {
+        setAngleMotor(output);
+      }
+    } 
+    else 
+    {
+      setAngleMotor(output);
+    }
   }
 
   private void configShoot() {
@@ -67,11 +114,9 @@ public class Shooter extends SubsystemBase {
 
     shootMotorLeft.configOpenloopRamp(0.1);
     shootMotorLeft.configClosedloopRamp(0);
-  }
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-    //ff = SmartDashboard.getEntry("Feedforward Shooter").getDouble(0);
+    angleEncoder.setPosition(0);
+    angleEncoder.setPositionConversionFactor(Constants.ADJUST_ROTS_TO_DEGR);
   }
+  
 }
