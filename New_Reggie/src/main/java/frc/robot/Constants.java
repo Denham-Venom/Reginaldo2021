@@ -68,4 +68,21 @@ public final class Constants
 	public static final double DT_PID_D = 0;
 
 //------------------------------------------------------
+//Conversions
+	public static final double ADJUST_ROTS_TO_DEGR = 3. * 1260./25. / 42.;
+	public static final double ADJUST_FF = 0.01;
+//------------------------------------------------------------
+
+
+	public static final double ERR = 2.0;
+
+
+
+
+
+
+
+
+
+
 }

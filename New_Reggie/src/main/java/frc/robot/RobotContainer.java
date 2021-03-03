@@ -61,14 +61,15 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    yButton.whenHeld(new IntakeBall(intake, Constants.INTAKE_BALL_SPEED));
     xButton.whenPressed(new InstantCommand(intake::toggleIntake));
     aButton.whenPressed(new InstantCommand(drivetrain::invertDrive, drivetrain));
     bButton.whenPressed(new InstantCommand(drivetrain::hLGearSwitch, drivetrain));
+    rtButton.whenHeld(new IntakeBall(intake, Constants.INTAKE_BALL_SPEED));
     rbButton.whileHeld(new StartEndCommand(() -> intake.setSpinUpMotor(Constants.SPIN_UP_SPEED), () -> intake.setSpinUpMotor(0)));
     lbButton.whileHeld(new StartEndCommand(() -> intake.setSpinUpMotor(-Constants.SPIN_UP_SPEED), () -> intake.setSpinUpMotor(0)));
-    // rtButton.whenPressed(new InstantCommand(drivetrain::goToStart));
-    // ltButton.whenPressed(new InstantCommand(drivetrain::goToEnd));
+    
+    yButton.whenHeld(new AimAndShoot(drivetrain, shooter));
+
 
     ltButton2.whenHeld(new IntakeBall(intake, -Constants.INTAKE_BALL_SPEED));
     rtButton2.whenHeld(new IntakeBall(intake, Constants.INTAKE_BALL_SPEED));
