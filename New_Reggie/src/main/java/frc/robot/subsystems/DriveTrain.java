@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
@@ -40,17 +42,12 @@ public class DriveTrain extends SubsystemBase {
   private double lowGear = Constants.DT_LG;// 0.8;
   private double lowGearTurn = Constants.DT_LGT;// 0.65;
 
-  // TrapezoidProfile.Constraints MPconstraints = new TrapezoidProfile.Constraints(maxMPVelocity, maxMPAcceleration);
-  // TrapezoidProfile.State MPgoal = new TrapezoidProfile.State();
-  // TrapezoidProfile.State MPsetpoint = new TrapezoidProfile.State();
+  // TrapezoidProfile.Constraints MPconstraints = new TrapezoidProfile.Constraints(Constants.MAX_MP_VELOCITY, Constants.MAX_MP_ACCELERATION);
+  // TrapezoidProfile.State MPgoal = new TrapezoidProfile.State(0,0);
+  // TrapezoidProfile.State MPsetpoint = new TrapezoidProfile.State(0,0);
   // TrapezoidProfile profile = new TrapezoidProfile(MPconstraints, MPsetpoint, MPgoal);
-  // ProfiledPIDController pidController = new ProfiledPIDController(movementP, movementI, movementD, MPconstraints);
 
   private static ShuffleboardTab tuning = Shuffleboard.getTab("Tuning");
-  static final NetworkTableEntry movementF = tuning.add("Movement F", 0).getEntry();
-  static final NetworkTableEntry movementP = tuning.add("Movement P", 0).getEntry();
-  static final NetworkTableEntry movementI = tuning.add("Movement I", 0).getEntry();
-  static final NetworkTableEntry movementD = tuning.add("Movement D", 0).getEntry();
   static final NetworkTableEntry movementFeet = tuning.add("Amount to move in Feet", 0).getEntry();
 
   /** Creates a new DriveTrain. */
@@ -63,30 +60,23 @@ public class DriveTrain extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putBoolean("DT Inverted?", inverted);
     SmartDashboard.putBoolean("In High Gear?", isHighGear);
+    SmartDashboard.putNumber("Error Amount", motorTopLeft.getClosedLoopError(Constants.kPIDLoopIdx) / Constants.FEET_TO_ROT_UNITS);
 
     feet = movementFeet.getDouble(0);
-
-    if(movementF.getDouble(0) != f) {
-      f = movementF.getDouble(0);
-      motorTopLeft.config_kF(Constants.kPIDLoopIdx, f, Constants.kTimeoutMS);
-      motorTopRight.config_kF(Constants.kPIDLoopIdx, f, Constants.kTimeoutMS);
-    }
-    if(movementP.getDouble(0) != p) {
-      p = movementP.getDouble(0);
-      motorTopLeft.config_kP(Constants.kPIDLoopIdx, p, Constants.kTimeoutMS);
-      motorTopRight.config_kP(Constants.kPIDLoopIdx, p, Constants.kTimeoutMS);
-    }
-    if(movementI.getDouble(0) != i) {
-      i = movementI.getDouble(0);
-      motorTopLeft.config_kI(Constants.kPIDLoopIdx, i, Constants.kTimeoutMS);
-      motorTopRight.config_kI(Constants.kPIDLoopIdx, i, Constants.kTimeoutMS);
-    }
-    if(movementD.getDouble(0) != d) {
-      d = movementD.getDouble(0);
-      motorTopLeft.config_kD(Constants.kPIDLoopIdx, d, Constants.kTimeoutMS);
-      motorTopRight.config_kD(Constants.kPIDLoopIdx, d, Constants.kTimeoutMS);
-    }
+    f = Constants.DT_PID_F;
+    motorTopLeft.config_kF(Constants.kPIDLoopIdx, Constants.DT_PID_F, Constants.kTimeoutMS);
+    motorTopRight.config_kF(Constants.kPIDLoopIdx, Constants.DT_PID_F, Constants.kTimeoutMS);
+    p = Constants.DT_PID_P;
+    motorTopLeft.config_kP(Constants.kPIDLoopIdx, Constants.DT_PID_P, Constants.kTimeoutMS);
+    motorTopRight.config_kP(Constants.kPIDLoopIdx, Constants.DT_PID_P, Constants.kTimeoutMS);
+    i = Constants.DT_PID_I;
+    motorTopLeft.config_kI(Constants.kPIDLoopIdx, Constants.DT_PID_I, Constants.kTimeoutMS);
+    motorTopRight.config_kI(Constants.kPIDLoopIdx, Constants.DT_PID_I, Constants.kTimeoutMS);
+    d = Constants.DT_PID_D;
+    motorTopLeft.config_kD(Constants.kPIDLoopIdx, Constants.DT_PID_D, Constants.kTimeoutMS);
+    motorTopRight.config_kD(Constants.kPIDLoopIdx, Constants.DT_PID_D, Constants.kTimeoutMS);
   }
+   // ProfiledPIDController pidController = new ProfiledPIDController(p, i, d, MPconstraints);
 
   private void motorConfig() {
     // Sets all motors to factory default.
@@ -94,8 +84,8 @@ public class DriveTrain extends SubsystemBase {
     motorTopRight.configFactoryDefault();
     motorBottomLeft.configFactoryDefault();
     motorBottomRight.configFactoryDefault();
-    // --------------------------------------------
 
+    // --------------------------------------------
     // Netutral Mode brake for staying still
     motorTopLeft.setNeutralMode(NeutralMode.Brake);
     motorTopRight.setNeutralMode(NeutralMode.Brake);
@@ -103,6 +93,7 @@ public class DriveTrain extends SubsystemBase {
     motorBottomRight.setNeutralMode(NeutralMode.Brake);
     // --------------------------------------------------
 
+    //--------------------------------------
     // Inverted so the robot doesn't spin
     motorTopLeft.setInverted(false);
     motorTopRight.setInverted(true);
@@ -110,14 +101,19 @@ public class DriveTrain extends SubsystemBase {
     motorBottomRight.setInverted(true);
     // -------------------------------------
 
-    // ----------------❤---------------------
+    //---------------------------------------
+    // Current Limiting
+    // motorTopLeft.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 10, 15, 0.5));
+    // motorTopLeft.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 20, 25, 1.0));
+    //---------------------------------------
+
+    // ----------------❤--------------------
     // Acceleration Ramping :)
     motorTopLeft.configOpenloopRamp(0.25);
     motorTopLeft.configClosedloopRamp(0);
     motorTopRight.configOpenloopRamp(0.25);
     motorTopRight.configClosedloopRamp(0);
-    //-----------------❤---------------------
-
+    //-----------------❤--------------------
     // Motors follow each other
     motorBottomLeft.follow(motorTopLeft);
     motorBottomRight.follow(motorTopRight);
@@ -127,10 +123,10 @@ public class DriveTrain extends SubsystemBase {
     motorTopRight.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, Constants.kPIDLoopIdx,
         Constants.kTimeoutMS);
 
-    f = movementF.getDouble(0);
-    p = movementP.getDouble(0);
-    i = movementI.getDouble(0);
-    d = movementD.getDouble(0);
+    f = Constants.DT_PID_F; 
+    p = Constants.DT_PID_P;
+    i = Constants.DT_PID_I;
+    d = Constants.DT_PID_D;
     feet = SmartDashboard.getEntry("Auto Move in feet").getDouble(10.0);
     motorTopLeft.config_kF(Constants.kPIDLoopIdx, f, Constants.kTimeoutMS);
     motorTopLeft.config_kP(Constants.kPIDLoopIdx, p, Constants.kTimeoutMS);

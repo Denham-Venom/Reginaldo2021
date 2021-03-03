@@ -40,7 +40,7 @@ public final class Constants
 	public static final double DT_HGT = 0.9;
 	public static final double DT_LG = 0.8;
 	public static final double DT_LGT = 0.65;
-	public static final double FEET_TO_ROT_UNITS = (2048) * (50 / 24) * (2 / Math.PI);//(Ticks per rev) * (gear ratio) / (rev/ft)  c=6pi in = pi/2 ft
+	public static final double FEET_TO_ROT_UNITS = (2048) * (50 / 24) * (2 / Math.PI) * (5);//(Ticks per rev) * (gear ratio) / (rev/ft)  c=6pi in = pi/2 ft
 	public static final int kTimeoutMS = 30;
 	public static final int kPIDLoopIdx = 0;
 	public static final int SHOOT_MOTOR_LEFT_ID = 5;
@@ -60,6 +60,12 @@ public final class Constants
 	public static final double SPIN_UP_SPEED = 0.8;
 	public static final double INTAKE_BALL_SPEED = 0.9;
 	public static final double allowableCloseLoopError = 0;
+	public static final double MAX_MP_VELOCITY = 0.5;
+	public static final double MAX_MP_ACCELERATION = 0.5;
+	public static final double DT_PID_F = 0;
+	public static final double DT_PID_P = 0.015;
+	public static final double DT_PID_I = 0;
+	public static final double DT_PID_D = 0;
 
 //------------------------------------------------------
 }
