@@ -5,11 +5,13 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
+import frc.robot.commands.auto.MoveShoot;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -68,7 +70,7 @@ public class RobotContainer {
     rbButton.whileHeld(new StartEndCommand(() -> intake.setSpinUpMotor(Constants.SPIN_UP_SPEED), () -> intake.setSpinUpMotor(0)));
     lbButton.whileHeld(new StartEndCommand(() -> intake.setSpinUpMotor(-Constants.SPIN_UP_SPEED), () -> intake.setSpinUpMotor(0)));
     
-    yButton.whenHeld(new AimAndShoot(drivetrain, shooter));
+    yButton.whenHeld(new VisionAim(drivetrain, shooter));
 
 
     ltButton2.whenHeld(new IntakeBall(intake, -Constants.INTAKE_BALL_SPEED));
@@ -89,8 +91,8 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  //public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
+  public Command getAutonomousCommand() {
+    return new MoveShoot(drivetrain, shooter, intake, 5);
     
-  //}
+  }
 }

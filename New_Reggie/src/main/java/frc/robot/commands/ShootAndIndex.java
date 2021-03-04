@@ -17,6 +17,8 @@ public class ShootAndIndex extends CommandBase {
   double spinUpSpeed;
   double indexSpeed;
   long startTime;
+  double seconds;
+  long curTime;
 
   /** Creates a new ShootAndIndex. */
   public ShootAndIndex(Shooter shoot, Intake intake, double shooterSpeed, double indexSpeed, double spinUpSpeed) {
@@ -39,6 +41,17 @@ public class ShootAndIndex extends CommandBase {
     addRequirements(shoot);
   }
 
+  public ShootAndIndex(Intake intake, Shooter shoot, double seconds) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    this.intake = intake;
+    this.shoot = shoot;
+    this.seconds = seconds;
+    shooterSpeed = Constants.SHOOTER_MOTOR_SPEED;
+    spinUpSpeed = Constants.SPIN_UP_SPEED;
+    indexSpeed = Constants.INDEXER_SPEED;
+    addRequirements(shoot);
+  }
+
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
@@ -49,7 +62,7 @@ public class ShootAndIndex extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    long curTime = System.currentTimeMillis();
+    curTime = System.currentTimeMillis();
     if(curTime - startTime > 1000) {
       intake.setIndexerMotor(indexSpeed);
       intake.setSpinUpMotor(spinUpSpeed);
@@ -67,6 +80,7 @@ public class ShootAndIndex extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if(curTime - startTime > seconds*1000) return true;
     return false;
   }
 }

@@ -75,6 +75,7 @@ public final class Constants
 
 
 	public static final double ERR = 2.0;
+	public static final double DT_MOVE_ERR = .1;
 
 
 

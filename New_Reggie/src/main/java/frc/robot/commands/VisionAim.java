@@ -15,31 +15,37 @@ import frc.robot.Constants;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Shooter;
 
-public class AimAndShoot extends CommandBase {
+public class VisionAim extends CommandBase {
   /** Creates a new AimAndShoot. */
   private final DriveTrain drive;
   private final Shooter shoot;
 
-  final NetworkTable lightData = NetworkTableInstance.getDefault().getTable("limelight");
-    final NetworkTableEntry tv = lightData.getEntry("tv");
-    final NetworkTableEntry tx = lightData.getEntry("tx");
-    final NetworkTableEntry ty = lightData.getEntry("ty");
-    final NetworkTableEntry ta = lightData.getEntry("ta");
-    final NetworkTableEntry ledMode = lightData.getEntry("ledMode");
+  static final NetworkTable lightData = NetworkTableInstance.getDefault().getTable("limelight");
+  static final NetworkTableEntry tv = lightData.getEntry("tv");
+  static final NetworkTableEntry tx = lightData.getEntry("tx");
+  static final NetworkTableEntry ty = lightData.getEntry("ty");
+  static final NetworkTableEntry ta = lightData.getEntry("ta");
+  static final NetworkTableEntry ledMode = lightData.getEntry("ledMode");
 
-    final ShuffleboardTab LIME = Shuffleboard.getTab("Tuning");
-    final NetworkTableEntry steerP = LIME.add("S P", 0).getEntry();
-    final NetworkTableEntry steerF = LIME.add("S F", 0).getEntry();
-    final NetworkTableEntry ALLOWABLE_ERR = LIME.add("E r r", 0).getEntry();
-    final NetworkTableEntry angleP = LIME.add("A P", 0).getEntry();
-    final NetworkTableEntry angleF = LIME.add("A F", 0)  .getEntry();
+  static final ShuffleboardTab LIME = Shuffleboard.getTab("Tuning");
+  static final NetworkTableEntry steerP = LIME.add("S P", 0).getEntry();
+  static final NetworkTableEntry steerF = LIME.add("S F", 0).getEntry();
+  static final NetworkTableEntry ALLOWABLE_ERR = LIME.add("E r r", 0).getEntry();
+  static final NetworkTableEntry angleP = LIME.add("A P", 0).getEntry();
+  static final NetworkTableEntry angleF = LIME.add("A F", 0)  .getEntry();
 
   private boolean m_LimelightHasValidTarget = false;
   private double m_LimelightDriveCommand = 0.0;
   private double m_LimelightSteerCommand = 0.0;
   private double m_LimelightAngleCommand = 0.0;
 
-  public AimAndShoot(DriveTrain drive, Shooter shoot) {
+  private long start = 0;
+  private long cur = 0;
+
+  private long startClose = 0;
+  private long curClose = 0;
+
+  public VisionAim(DriveTrain drive, Shooter shoot) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.drive = drive;
     this.shoot = shoot;
@@ -47,8 +53,7 @@ public class AimAndShoot extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() 
-  {}
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -62,15 +67,33 @@ public class AimAndShoot extends CommandBase {
     SmartDashboard.putNumber("LimelightY", y);
     SmartDashboard.putNumber("LimelightArea", area);
 
-
     Update_Limelight_Tracking();
 
     ledMode.setDouble(3);
     if(m_LimelightHasValidTarget)
     {
       if(Math.abs(tx.getDouble(0)) > Constants.ERR) {
-        drive.setLeftMotors(m_LimelightDriveCommand - m_LimelightSteerCommand);
-        drive.setRightMotors(m_LimelightDriveCommand + m_LimelightSteerCommand);
+        if(Math.abs(tx.getDouble(0)) < 3) {
+          if(startClose == 0) {
+            startClose = System.currentTimeMillis();
+          } else {
+            curClose = System.currentTimeMillis();
+          }
+        } else {
+          startClose = 0;
+          curClose = 0;
+        }
+        int sign = (int) (m_LimelightSteerCommand / Math.abs(m_LimelightSteerCommand));
+        double diff = sign * (curClose-startClose);
+        drive.setLeftMotors(m_LimelightDriveCommand + m_LimelightSteerCommand + diff/1000);
+        drive.setRightMotors(m_LimelightDriveCommand - m_LimelightSteerCommand - diff/1000);
+        start = 0;
+      } else {
+        if(start == 0) {
+          start = System.currentTimeMillis();
+        } else {
+          cur = System.currentTimeMillis();
+        }
       }
       if(Math.abs(ty.getDouble(0)+15 - shoot.angleEncoder.getPosition()) > Constants.ERR)
       {
@@ -89,12 +112,14 @@ public class AimAndShoot extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) 
-  {}
+  public void end(boolean interrupted) {
+    ledMode.setDouble(1);
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if(cur - start > 250) return true;
     return false;
   }
 //Allows for the LimeLight to constantly send data to smartdashboard to see target
@@ -109,7 +134,7 @@ public class AimAndShoot extends CommandBase {
     final double DESIRED_TARGET_AREA = 0.0;
     final double speedLimit = 0.5;
     final double angleSpeedLimit = 0.3;
-    final double steerLimit = 0.35;
+    final double steerLimit = 0.25;
 
     double tv = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0);
     double tx = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
@@ -120,7 +145,7 @@ public class AimAndShoot extends CommandBase {
     {
       m_LimelightHasValidTarget = false;
       m_LimelightDriveCommand = 0.0;
-      m_LimelightSteerCommand = 0.15;
+      m_LimelightSteerCommand = 0.25;
       m_LimelightAngleCommand = 0.0;
       return;
     }

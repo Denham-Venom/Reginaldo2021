@@ -164,6 +164,14 @@ public class DriveTrain extends SubsystemBase {
     return feet * Constants.FEET_TO_ROT_UNITS;
   }
 
+  public double amountToMove(double feet) {
+    return feet * Constants.FEET_TO_ROT_UNITS;
+  }
+
+  public double getClosedLoopErrorFeet() {
+    return motorTopLeft.getClosedLoopError(Constants.kPIDLoopIdx) / Constants.FEET_TO_ROT_UNITS;
+  }
+
   // public void goToStart() {
   //   pidController.setGoal(0);
   // }
@@ -214,8 +222,7 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public void setWithPostion(double feet) {
-    this.feet = feet;
-    motorTopLeft.set(TalonFXControlMode.Position, amountToMove());
-    motorTopRight.set(TalonFXControlMode.Position, amountToMove());
+    motorTopLeft.set(TalonFXControlMode.Position, amountToMove(feet));
+    motorTopRight.set(TalonFXControlMode.Position, amountToMove(feet));
   }
 }      
