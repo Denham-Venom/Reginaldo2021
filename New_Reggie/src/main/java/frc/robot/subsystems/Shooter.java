@@ -23,13 +23,20 @@ import frc.robot.Constants;
 
 public class Shooter extends SubsystemBase {
   /** Creates a new Shooter. */
-
+  double speed;
   private final TalonFX shootMotorLeft = new TalonFX(Constants.SHOOT_MOTOR_LEFT_ID);
   private final TalonFX shootMotorRight = new TalonFX(Constants.SHOOT_MOTOR_RIGHT_ID);
   private final CANSparkMax adjustAngleMotorLeft = new CANSparkMax(Constants.ADJUST_ANGLE_MOTOR_LEFT, CANSparkMaxLowLevel.MotorType.kBrushless);
   private final CANSparkMax adjustAngleMotorRight = new CANSparkMax(Constants.ADJUST_ANGLE_MOTOR_RIGHT, CANSparkMaxLowLevel.MotorType.kBrushless);
   public final CANEncoder angleEncoder = adjustAngleMotorLeft.getEncoder();
 //---------------------------------------------------------------
+  private static ShuffleboardTab tuning = Shuffleboard.getTab("Tuning");
+  static final NetworkTableEntry shooterSpeed = tuning.add("Adjust shooter speed", 0).getEntry(); 
+
+
+
+
+
 
   public Shooter() {
     configShoot();
@@ -41,6 +48,11 @@ public class Shooter extends SubsystemBase {
     //ff = SmartDashboard.getEntry("Feedforward Shooter").getDouble(0);
     
     SmartDashboard.putNumber("Shooter Angle", angleEncoder.getPosition());
+    speed = shooterSpeed.getDouble(0);
+  }
+
+  public void setShooterMotors(double speed) {
+    shootMotorLeft.set(ControlMode.PercentOutput, speed);
   }
 
   public void setAngleMotor(double speed) {
@@ -48,11 +60,8 @@ public class Shooter extends SubsystemBase {
     adjustAngleMotorRight.set(speed + Constants.FEEDFORWARD);
   }
 
-  public void setShooterMotors(double speed) {
-    shootMotorLeft.set(ControlMode.PercentOutput, speed);
-  }
-
   public void setAngleMotorsSafe(double output) {
+    if(output > Constants.SHOOT_ADJ_VOLT_LIM) output = Constants.SHOOT_ADJ_VOLT_LIM;
     if(angleEncoder.getPosition() < 1)
     {
       if(output < 0) 

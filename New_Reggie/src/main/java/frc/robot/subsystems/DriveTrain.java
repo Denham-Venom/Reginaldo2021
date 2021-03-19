@@ -30,7 +30,7 @@ public class DriveTrain extends SubsystemBase {
 
   // private double maxMPVelocity;
   // private double maxMPAcceleration;
-  private double feet;
+  private double m_feet;
   private double f;
   private double p;
   private double i;
@@ -62,7 +62,7 @@ public class DriveTrain extends SubsystemBase {
     SmartDashboard.putBoolean("In High Gear?", isHighGear);
     SmartDashboard.putNumber("Error Amount", motorTopLeft.getClosedLoopError(Constants.kPIDLoopIdx) / Constants.FEET_TO_ROT_UNITS);
 
-    feet = movementFeet.getDouble(0);
+    m_feet = movementFeet.getDouble(0);
     f = Constants.DT_PID_F;
     motorTopLeft.config_kF(Constants.kPIDLoopIdx, Constants.DT_PID_F, Constants.kTimeoutMS);
     motorTopRight.config_kF(Constants.kPIDLoopIdx, Constants.DT_PID_F, Constants.kTimeoutMS);
@@ -127,7 +127,7 @@ public class DriveTrain extends SubsystemBase {
     p = Constants.DT_PID_P;
     i = Constants.DT_PID_I;
     d = Constants.DT_PID_D;
-    feet = SmartDashboard.getEntry("Auto Move in feet").getDouble(10.0);
+    m_feet = SmartDashboard.getEntry("Auto Move in feet").getDouble(10.0);
     motorTopLeft.config_kF(Constants.kPIDLoopIdx, f, Constants.kTimeoutMS);
     motorTopLeft.config_kP(Constants.kPIDLoopIdx, p, Constants.kTimeoutMS);
     motorTopLeft.config_kI(Constants.kPIDLoopIdx, i, Constants.kTimeoutMS);
@@ -161,7 +161,7 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public double amountToMove() {
-    return feet * Constants.FEET_TO_ROT_UNITS;
+    return m_feet * Constants.FEET_TO_ROT_UNITS;
   }
 
   public double amountToMove(double feet) {
@@ -222,7 +222,7 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public void setWithPostion(double feet) {
-    motorTopLeft.set(TalonFXControlMode.Position, amountToMove(feet));
-    motorTopRight.set(TalonFXControlMode.Position, amountToMove(feet));
+    motorTopLeft.set(TalonFXControlMode.Position, motorTopLeft.getSelectedSensorPosition() + amountToMove(feet));
+    motorTopRight.set(TalonFXControlMode.Position, motorTopRight.getSelectedSensorPosition() + amountToMove(feet));
   }
 }      

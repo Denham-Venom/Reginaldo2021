@@ -55,13 +55,13 @@ public class ShootAndIndex extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    shoot.setShooterMotors(shooterSpeed);
     startTime = System.currentTimeMillis();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shoot.setShooterMotors(shooterSpeed);
     curTime = System.currentTimeMillis();
     if(curTime - startTime > 1000) {
       intake.setIndexerMotor(indexSpeed);
@@ -80,7 +80,10 @@ public class ShootAndIndex extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(curTime - startTime > seconds*1000) return true;
+    // if(curTime - startTime > seconds*1000) 
+    //{
+        //return true;
+    //}
     return false;
   }
 }

@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -12,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 import frc.robot.commands.auto.MoveShoot;
-
 /**
  * This class is where the bulk of the robot should be declared. Since
  * Command-based is a "declarative" paradigm, very little robot logic should
@@ -70,15 +70,24 @@ public class RobotContainer {
     rbButton.whileHeld(new StartEndCommand(() -> intake.setSpinUpMotor(Constants.SPIN_UP_SPEED), () -> intake.setSpinUpMotor(0)));
     lbButton.whileHeld(new StartEndCommand(() -> intake.setSpinUpMotor(-Constants.SPIN_UP_SPEED), () -> intake.setSpinUpMotor(0)));
     
-    yButton.whenHeld(new VisionAim(drivetrain, shooter));
+    //negative 9 to see if it goes backwards
+    ltButton2.whenHeld(new StartEndCommand(() -> drivetrain.setWithPostion(-9.56), () -> drivetrain.stopMotors(), drivetrain));
+
+    ltButton.toggleWhenPressed(new StartEndCommand(() ->  NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setDouble(0), () -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setDouble(1)));
+
+    yButton.whenHeld(new VisionTurnThenAim(drivetrain, shooter));
+
+    //button that when pressed, moves robot forward/backward when it moves forward delay shooter and shoot
 
 
-    ltButton2.whenHeld(new IntakeBall(intake, -Constants.INTAKE_BALL_SPEED));
+    //ltButton2.whenHeld(new IntakeBall(intake, -Constants.INTAKE_BALL_SPEED));
     rtButton2.whenHeld(new IntakeBall(intake, Constants.INTAKE_BALL_SPEED));
     bButton2.whileHeld(new ShooterAngle(shooter, -Constants.ANGLE_MOTOR_SPEED));
     aButton2.whileHeld(new ShooterAngle(shooter, Constants.ANGLE_MOTOR_SPEED));
-    yButton2.whenHeld(new StartEndCommand(() -> drivetrain.setWithPostion(), () -> drivetrain.stopMotors(), drivetrain));
-    xButton2.whenHeld(new ShootAndIndex(intake, shooter));
+
+    //9 parameter in setWithPostion
+    yButton2.whenHeld(new StartEndCommand(() -> drivetrain.setWithPostion(9.5), () -> drivetrain.stopMotors(), drivetrain));
+    xButton2.whileHeld(new ShootAndIndex(intake, shooter));
     lbButton2.whileHeld(new StartEndCommand(() -> intake.setIndexerMotor(Constants.INDEXER_SPEED), () -> intake.setIndexerMotor(0)));
   }
 

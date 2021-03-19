@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -53,7 +54,9 @@ public class VisionAim extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    ledMode.setDouble(0);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -69,7 +72,6 @@ public class VisionAim extends CommandBase {
 
     Update_Limelight_Tracking();
 
-    ledMode.setDouble(3);
     if(m_LimelightHasValidTarget)
     {
       if(Math.abs(tx.getDouble(0)) > Constants.ERR) {
@@ -88,6 +90,7 @@ public class VisionAim extends CommandBase {
         drive.setLeftMotors(m_LimelightDriveCommand + m_LimelightSteerCommand + diff/1000);
         drive.setRightMotors(m_LimelightDriveCommand - m_LimelightSteerCommand - diff/1000);
         start = 0;
+        cur = 0;
       } else {
         if(start == 0) {
           start = System.currentTimeMillis();
@@ -152,7 +155,7 @@ public class VisionAim extends CommandBase {
 
     m_LimelightHasValidTarget = true;
 
-    double steer_cmd = tx * STEER_P + tx * Math.abs(tx) * STEER_F;
+    double steer_cmd = tx * STEER_P + tx / Math.abs(tx) * STEER_F;
     m_LimelightSteerCommand = steer_cmd;
 
     if(Math.abs(steer_cmd) > steerLimit) {

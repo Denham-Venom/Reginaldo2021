@@ -51,7 +51,7 @@ public final class Constants
 	public static final int ADJUST_ANGLE_MOTOR_RIGHT = 9; // spark #4
 	public static final double FEEDFORWARD = 0.009;
 	public static final double ANGLE_MOTOR_SPEED = 0.1;
-	public static final double SHOOTER_MOTOR_SPEED = 0.4;
+	public static final double SHOOTER_MOTOR_SPEED = 0.45; //maybe set lower
 	public static final int INTAKE_MOTOR_ID = 10; // spark #1
 	public static final int INDEXER_MOTOR_1 = 7; //Left
 	public static final int INDEXER_MOTOR_2 = 8; //Right
@@ -76,6 +76,12 @@ public final class Constants
 
 	public static final double ERR = 2.0;
 	public static final double DT_MOVE_ERR = .1;
+	public static final double ALLOWABLE_STEER_ERR = 1;
+	public static final double ALLOWABLE_AIM_ERR = .25;
+	public static final double LL_ANG = 10;
+	public static final double SHOOTER_AIM_ANG_FF = 3.5;
+	public static final double CAM_ANG_TO_SHOOT_ANG = 1.18;
+	public static final double SHOOT_ADJ_VOLT_LIM = .2;
 
 
 

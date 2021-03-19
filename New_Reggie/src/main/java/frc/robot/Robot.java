@@ -5,9 +5,12 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -18,6 +21,23 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  * project.
  */
 public class Robot extends TimedRobot {
+
+  public static final ShuffleboardTab tuning = Shuffleboard.getTab("Tuning");
+  public static final NetworkTableEntry steerP = tuning.add("S P", 0).getEntry();
+  public static final NetworkTableEntry steerI = tuning.add("S I", 0).getEntry();
+  public static final NetworkTableEntry steerD = tuning.add("S D", 0).getEntry();
+  public static final NetworkTableEntry steerF = tuning.add("S F", 0).getEntry();
+  public static final NetworkTableEntry aimP = tuning.add("A P", 0).getEntry();
+  public static final NetworkTableEntry aimI = tuning.add("A I", 0).getEntry();
+  public static final NetworkTableEntry aimD = tuning.add("A D", 0).getEntry();
+  public static final NetworkTableEntry aimF = tuning.add("A F", 0).getEntry();
+
+  public static final NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
+  public static final NetworkTableEntry lltx = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx");
+  public static final NetworkTableEntry llty = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty");
+  public static final NetworkTableEntry lltv = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv");
+  public static final NetworkTableEntry ledMode = limelight.getEntry("ledMode");
+
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
@@ -48,6 +68,9 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    SmartDashboard.putNumber("tx", lltx.getDouble(0));
+    SmartDashboard.putNumber("ty", llty.getDouble(0));
+    SmartDashboard.putNumber("tv", lltv.getDouble(0));
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
