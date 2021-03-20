@@ -23,6 +23,9 @@ import frc.robot.Constants;
 
 public class DriveTrain extends SubsystemBase {
 
+  NetworkTableEntry lowerGearSpeed = Shuffleboard.getTab("Tuning").add("LG SPD", 0).getEntry();
+  NetworkTableEntry lowerGearTurn = Shuffleboard.getTab("Tuning").add("LG TRN", 0).getEntry();
+
   private TalonFX motorTopLeft = new TalonFX(Constants.MOTOR_TOP_LEFT_ID);
   private TalonFX motorBottomLeft = new TalonFX(Constants.MOTOR_BOTTOM_LEFT_ID);
   private TalonFX motorTopRight = new TalonFX(Constants.MOTOR_TOP_RIGHT_ID);
@@ -61,6 +64,9 @@ public class DriveTrain extends SubsystemBase {
     SmartDashboard.putBoolean("DT Inverted?", inverted);
     SmartDashboard.putBoolean("In High Gear?", isHighGear);
     SmartDashboard.putNumber("Error Amount", motorTopLeft.getClosedLoopError(Constants.kPIDLoopIdx) / Constants.FEET_TO_ROT_UNITS);
+
+    lowGear = lowerGearSpeed.getDouble(0);
+    lowGearTurn = lowerGearTurn.getDouble(0);
 
     m_feet = movementFeet.getDouble(0);
     f = Constants.DT_PID_F;

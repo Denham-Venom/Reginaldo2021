@@ -81,7 +81,8 @@ public final class Constants
 	public static final double LL_ANG = 10;
 	public static final double SHOOTER_AIM_ANG_FF = 3.5;
 	public static final double CAM_ANG_TO_SHOOT_ANG = 1.18;
-	public static final double SHOOT_ADJ_VOLT_LIM = .2;
+	public static final double SHOOT_ADJ_VOLT_LIM = .2; 
+	public static final double RPM_TO_TP100MS = 2048./600. * 18./14.; // OutRevs/Min * Min/Sec * Sec/100ms * Ticks/InRev * InRev/OutRev
 
 
 

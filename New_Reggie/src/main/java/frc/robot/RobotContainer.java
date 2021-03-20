@@ -71,7 +71,7 @@ public class RobotContainer {
     lbButton.whileHeld(new StartEndCommand(() -> intake.setSpinUpMotor(-Constants.SPIN_UP_SPEED), () -> intake.setSpinUpMotor(0)));
     
     //negative 9 to see if it goes backwards
-    ltButton2.whenHeld(new StartEndCommand(() -> drivetrain.setWithPostion(-9.56), () -> drivetrain.stopMotors(), drivetrain));
+    ltButton2.whenHeld(new StartEndCommand(() -> shooter.setShooterVelocity(), () -> shooter.setShooterMotors(0)));
 
     ltButton.toggleWhenPressed(new StartEndCommand(() ->  NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setDouble(0), () -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setDouble(1)));
 
