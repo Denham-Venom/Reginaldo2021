@@ -26,7 +26,7 @@ import frc.robot.subsystems.Shooter;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AutoScore extends SequentialCommandGroup {
 
-  private double green = 15;
+  private double green = 15; //feet
   private double yellow = 15;
   private double blue = 15;
   private double red = 15;
@@ -38,6 +38,7 @@ public class AutoScore extends SequentialCommandGroup {
     double startAngle = dt.getAngle();
     addCommands(
       new InstantCommand(intake::extendIntake),
+
       new VisionTurnThenAim(dt, shoot),
       new ShootAndIndex(intake, shoot),
       new TurnToAngle(dt, startAngle), //resetangle
@@ -45,6 +46,7 @@ public class AutoScore extends SequentialCommandGroup {
       new TurnToAngle(dt, startAngle), //resetangle
       new IntakeBall(intake, Constants.INTAKE_BALL_SPEED),//getballs
       new Move(dt, yellow),//gotoyellow
+
       new VisionTurnThenAim(dt, shoot),//aimandshoot
       new ShootAndIndex(intake, shoot),
       new TurnToAngle(dt, startAngle), //resetangle
@@ -52,6 +54,7 @@ public class AutoScore extends SequentialCommandGroup {
       new TurnToAngle(dt, startAngle), //resetangle
       new IntakeBall(intake, Constants.INTAKE_BALL_SPEED),//getballs
       new Move(dt, blue),//gotoblue
+
       new VisionTurnThenAim(dt, shoot), // aimandshoot
       new ShootAndIndex(intake, shoot),
       new TurnToAngle(dt, startAngle), //resetangle
@@ -60,6 +63,7 @@ public class AutoScore extends SequentialCommandGroup {
       new IntakeBall(intake, Constants.INTAKE_BALL_SPEED), // getballs
       new TurnToAngle(dt, startAngle), //resetangle
       new Move(dt, red), // gotored
+
       new TurnToAngle(dt, startAngle), //resetangle
       new VisionTurnThenAim(dt, shoot),//aimandshoot
       new TurnToAngle(dt, startAngle), //resetangle
@@ -68,6 +72,7 @@ public class AutoScore extends SequentialCommandGroup {
       new IntakeBall(intake, Constants.INTAKE_BALL_SPEED),//getballs
       new TurnToAngle(dt, startAngle), //resetangle
       new Move(dt, red),//gotored
+
       new TurnToAngle(dt, startAngle), //resetangle
       new VisionTurnThenAim(dt, shoot)//aimandshoot
     );
