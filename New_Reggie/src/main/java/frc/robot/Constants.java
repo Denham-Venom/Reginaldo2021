@@ -59,13 +59,16 @@ public final class Constants
 	public static final double INDEXER_SPEED = 1;
 	public static final double SPIN_UP_SPEED = 0.8;
 	public static final double INTAKE_BALL_SPEED = 0.9;
-	public static final double allowableCloseLoopError = 0;
+	public static final double allowableCloseLoopError = 0.25; //drivetrain movement in feet
 	public static final double MAX_MP_VELOCITY = 0.5;
 	public static final double MAX_MP_ACCELERATION = 0.5;
 	public static final double DT_PID_F = 0;
 	public static final double DT_PID_P = 0.015;
 	public static final double DT_PID_I = 0;
 	public static final double DT_PID_D = 0;
+	public static final double DT_PID_FT_P = 0.1;
+	public static final double DT_TURN_F = 0.1;
+	public static final double DT_TURN_P = 0.005;
 
 //------------------------------------------------------
 //Conversions
@@ -83,6 +86,15 @@ public final class Constants
 	public static final double CAM_ANG_TO_SHOOT_ANG = 1.18;
 	public static final double SHOOT_ADJ_VOLT_LIM = .2; 
 	public static final double RPM_TO_TP100MS = 2048./600. * 18./14.; // OutRevs/Min * Min/Sec * Sec/100ms * Ticks/InRev * InRev/OutRev
+	public static final double SHOOTER_MOTOR_VELOCITY = 2500; //RPM...allegedly
+
+
+
+	public static final double PEAK_SHOOTER = 0.6;
+	public static final int kAUXLoopIdx = 1;
+	public static final double ENCODER_TICKS_TO_FEET = 1 / FEET_TO_ROT_UNITS;
+	public static final double DT_TURN_I = 0;
+	public static final double DT_TURN_D = 0;
 
 
 

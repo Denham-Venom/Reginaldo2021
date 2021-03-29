@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Shooter;
 
@@ -29,11 +30,11 @@ public class VisionAim extends CommandBase {
   static final NetworkTableEntry ledMode = lightData.getEntry("ledMode");
 
   static final ShuffleboardTab LIME = Shuffleboard.getTab("Tuning");
-  static final NetworkTableEntry steerP = LIME.add("S P", 0).getEntry();
-  static final NetworkTableEntry steerF = LIME.add("S F", 0).getEntry();
+  //static final NetworkTableEntry steerP = LIME.add("S P", 0).getEntry();
+  //static final NetworkTableEntry steerF = LIME.add("S F", 0).getEntry();
   static final NetworkTableEntry ALLOWABLE_ERR = LIME.add("E r r", 0).getEntry();
-  static final NetworkTableEntry angleP = LIME.add("A P", 0).getEntry();
-  static final NetworkTableEntry angleF = LIME.add("A F", 0)  .getEntry();
+  //static final NetworkTableEntry angleP = LIME.add("A P", 0).getEntry();
+  //static final NetworkTableEntry angleF = LIME.add("A F", 0)  .getEntry();
 
   private boolean m_LimelightHasValidTarget = false;
   private double m_LimelightDriveCommand = 0.0;
@@ -128,10 +129,10 @@ public class VisionAim extends CommandBase {
 //Allows for the LimeLight to constantly send data to smartdashboard to see target
   public void Update_Limelight_Tracking()
   {
-    double STEER_P = steerP.getDouble(0);
-    double STEER_F = steerF.getDouble(0);
-    double ANGLE_P = angleP.getDouble(0);
-    double ANGLE_F = angleF.getDouble(0);
+    double STEER_P = Robot.steerP.getDouble(0);
+    double STEER_F = Robot.steerF.getDouble(0);
+    double ANGLE_P = Robot.aimP.getDouble(0);
+    double ANGLE_F = Robot.aimF.getDouble(0);
 
     final double AUTODRIVE = 0.0;
     final double DESIRED_TARGET_AREA = 0.0;

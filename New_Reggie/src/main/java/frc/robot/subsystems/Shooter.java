@@ -133,12 +133,17 @@ public class Shooter extends SubsystemBase {
 
     shootMotorRight.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, Constants.kTimeoutMS);
     shootMotorRight.setSensorPhase(false);
-
+//---------------------------------------------------------------------
     shootMotorLeft.configNominalOutputForward(0);
     shootMotorLeft.configNominalOutputReverse(0);
-    shootMotorLeft.configPeakOutputForward(1);
-    shootMotorLeft.configPeakOutputReverse(-1);
+    shootMotorLeft.configPeakOutputForward(Constants.PEAK_SHOOTER);
+    shootMotorLeft.configPeakOutputReverse(-Constants.PEAK_SHOOTER);
 
+    shootMotorRight.configNominalOutputForward(0);
+    shootMotorRight.configNominalOutputReverse(0);
+    shootMotorRight.configPeakOutputForward(Constants.PEAK_SHOOTER);
+    shootMotorRight.configPeakOutputReverse(-Constants.PEAK_SHOOTER);
+//------------------------------------------------------------------------------
     shootMotorLeft.config_kF(Constants.kSlotIdx, 0, Constants.kTimeMS); //timeout maybe 30
     shootMotorLeft.config_kP(Constants.kSlotIdx, 0, Constants.kTimeMS);
     shootMotorLeft.config_kI(Constants.kSlotIdx, 0, Constants.kTimeMS);
@@ -151,6 +156,7 @@ public class Shooter extends SubsystemBase {
 
     shootMotorLeft.configClosedloopRamp(.25);
     shootMotorRight.configClosedloopRamp(.25);
+
 
     adjustAngleMotorLeft.restoreFactoryDefaults();
     adjustAngleMotorLeft.setInverted(true);

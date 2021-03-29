@@ -26,7 +26,7 @@ public class VisionAimPID extends PIDCommand {
         // This should return the measurement
         () -> shooter.angleEncoder.getPosition(),
         // This should return the setpoint (can also be a constant)
-        () -> (Robot.lltv.getDouble(0) == 1) ? (Robot.llty.getDouble(0) + Constants.LL_ANG) * Constants.CAM_ANG_TO_SHOOT_ANG /*- shooter.angleEncoder.getPosition()*/ : 0, //0 is when shooter is bottomed out, tv = 1 means target found
+        () -> (Robot.lltv.getDouble(0) == 1) ? (Robot.llty.getDouble(0) /*+ Constants.LL_ANG*/) * Constants.CAM_ANG_TO_SHOOT_ANG /*- shooter.angleEncoder.getPosition()*/ : 0, //0 is when shooter is bottomed out, tv = 1 means target found
         // This uses the output
         output -> {
           double err = Robot.llty.getDouble(0);

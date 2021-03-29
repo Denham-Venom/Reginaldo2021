@@ -5,40 +5,46 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
-import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Intake;
+import edu.wpi.first.wpilibj.Timer;
 
-public class Move extends CommandBase {
-  DriveTrain dt;
-  double feet;
-  /** Creates a new Move. */
-  public Move(DriveTrain dt, double feet) {
-    this.dt = dt;
-    this.feet = feet;
+public class IntakeStop extends CommandBase {
+  private Intake intake;
+  double start = 0;
+  double runtime = 0;
+  
+  /** Creates a new IntakeStop. */
+  public IntakeStop(Intake intake) {
     // Use addRequirements() here to declare subsystem dependencies.
-    //addRequirements(dt);
+    this.intake = intake;
+    addRequirements(intake);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    dt.setWithPostion(feet);
+    start = Timer.getFPGATimestamp();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    runtime = Timer.getFPGATimestamp() - start;
+  }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    dt.stopMotors();
+      intake.setIntakeMotor(0);
+
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(dt.getClosedLoopErrorFeet() < Constants.DT_MOVE_ERR) return true;
+    if(runtime > 5){
+      return true;
+    }
     return false;
   }
 }

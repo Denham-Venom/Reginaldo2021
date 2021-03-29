@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -12,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
+import frc.robot.commands.auto.AutoScore;
 import frc.robot.commands.auto.MoveShoot;
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -64,28 +67,21 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     xButton.whenPressed(new InstantCommand(intake::toggleIntake));
+//---------------------------------------------------------------------
+    yButton.whenHeld(new AutoScore(drivetrain, intake, shooter, 0.3));
+//---------------------------------------------------------------------
     aButton.whenPressed(new InstantCommand(drivetrain::invertDrive, drivetrain));
     bButton.whenPressed(new InstantCommand(drivetrain::hLGearSwitch, drivetrain));
     rtButton.whenHeld(new IntakeBall(intake, Constants.INTAKE_BALL_SPEED));
     rbButton.whileHeld(new StartEndCommand(() -> intake.setSpinUpMotor(Constants.SPIN_UP_SPEED), () -> intake.setSpinUpMotor(0)));
     lbButton.whileHeld(new StartEndCommand(() -> intake.setSpinUpMotor(-Constants.SPIN_UP_SPEED), () -> intake.setSpinUpMotor(0)));
-    
-    //negative 9 to see if it goes backwards
-    ltButton2.whenHeld(new StartEndCommand(() -> shooter.setShooterVelocity(), () -> shooter.setShooterMotors(0)));
-
     ltButton.toggleWhenPressed(new StartEndCommand(() ->  NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setDouble(0), () -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setDouble(1)));
-
-    yButton.whenHeld(new VisionTurnThenAim(drivetrain, shooter));
-
-    //button that when pressed, moves robot forward/backward when it moves forward delay shooter and shoot
-
-
-    //ltButton2.whenHeld(new IntakeBall(intake, -Constants.INTAKE_BALL_SPEED));
+    
+    ltButton2.whenHeld(new StartEndCommand(() -> shooter.setShooterVelocity(), () -> shooter.setShooterMotors(0)));
+    rbButton2.whenHeld(new TurnToAngle(drivetrain, drivetrain.getAngle()));
     rtButton2.whenHeld(new IntakeBall(intake, Constants.INTAKE_BALL_SPEED));
     bButton2.whileHeld(new ShooterAngle(shooter, -Constants.ANGLE_MOTOR_SPEED));
     aButton2.whileHeld(new ShooterAngle(shooter, Constants.ANGLE_MOTOR_SPEED));
-
-    //9 parameter in setWithPostion
     yButton2.whenHeld(new StartEndCommand(() -> drivetrain.setWithPostion(9.5), () -> drivetrain.stopMotors(), drivetrain));
     xButton2.whileHeld(new ShootAndIndex(intake, shooter));
     lbButton2.whileHeld(new StartEndCommand(() -> intake.setIndexerMotor(Constants.INDEXER_SPEED), () -> intake.setIndexerMotor(0)));
@@ -95,13 +91,14 @@ public class RobotContainer {
     drivetrain.setDefaultCommand(new ArcadeDrive(drivetrain, pilotDriverController));
   }
 
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return new MoveShoot(drivetrain, shooter, intake, 5);
+    return new AutoScore(drivetrain, intake, shooter, .3);
     
   }
 }

@@ -7,12 +7,17 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
 
 public class IntakeBall extends CommandBase {
   private final Intake intake;
   private double speed;
+  double start = 0;
+  double runtime = 0;
+
+
   /**
    * Creates a new IntakeBall.
    */
@@ -26,13 +31,16 @@ public class IntakeBall extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    start = Timer.getFPGATimestamp();
+
     intake.setIntakeMotor(speed);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // sets the speed of the intake motor (intakes or extakes the ball)
+    runtime = Timer.getFPGATimestamp() - start;
+
   }
 
   // Called once the command ends or is interrupted.
@@ -45,6 +53,9 @@ public class IntakeBall extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if(runtime > 5){
+      return true;
+    }
     return false;
   }
 }

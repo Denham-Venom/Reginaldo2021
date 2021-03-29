@@ -18,16 +18,14 @@ import frc.robot.subsystems.Shooter;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class MoveShoot extends SequentialCommandGroup {
   /** Creates a new MoveShoot. */
-  public MoveShoot(DriveTrain dt, Shooter s, Intake i, double shootTime) {
+  public MoveShoot(DriveTrain dt, Shooter s, Intake i, double RPM, double spinUpSpeed, double indexSpeed, double shootTime) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new InstantCommand(() -> i.extendIntake()),
-
-      //Bryce is testing this part of the code to see if this is the problem.
       new Move(dt, 2),
-      new VisionAim(dt, s)
-      //new ShootAndIndex(i, s, shootTime)
+      new VisionAim(dt, s),
+      new ShootAndIndex(i, s, RPM, spinUpSpeed, indexSpeed, shootTime)
       );
   }
 }

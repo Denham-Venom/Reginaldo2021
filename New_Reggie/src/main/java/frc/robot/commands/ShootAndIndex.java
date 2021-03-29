@@ -35,27 +35,27 @@ public class ShootAndIndex extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
     this.intake = intake;
     this.shoot = shoot;
-    shooterSpeed = Constants.SHOOTER_MOTOR_SPEED;
+    shooterSpeed = Constants.SHOOTER_MOTOR_VELOCITY;
     spinUpSpeed = Constants.SPIN_UP_SPEED;
     indexSpeed = Constants.INDEXER_SPEED;
     addRequirements(shoot);
   }
 
-  public ShootAndIndex(Intake intake, Shooter shoot, double seconds) {
+  public ShootAndIndex(Intake intake, Shooter shoot, double RPM, double spinUpSpeed, double indexSpeed, double seconds) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.intake = intake;
     this.shoot = shoot;
     this.seconds = seconds;
-    shooterSpeed = Constants.SHOOTER_MOTOR_SPEED;
-    spinUpSpeed = Constants.SPIN_UP_SPEED;
-    indexSpeed = Constants.INDEXER_SPEED;
+    shooterSpeed = RPM;
+    this.spinUpSpeed = spinUpSpeed;
+    this.indexSpeed = indexSpeed;
     addRequirements(shoot);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shoot.setShooterMotors(shooterSpeed);
+    shoot.setShooterVelocity(shooterSpeed);
     startTime = System.currentTimeMillis();
   }
 
