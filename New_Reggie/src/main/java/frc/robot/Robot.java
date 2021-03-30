@@ -31,6 +31,7 @@ public class Robot extends TimedRobot {
   public static final NetworkTableEntry aimI = tuning.add("A I", 0).getEntry();
   public static final NetworkTableEntry aimD = tuning.add("A D", 0).getEntry();
   public static final NetworkTableEntry aimF = tuning.add("A F", 0).getEntry();
+  public static final NetworkTableEntry move = tuning.add("move", 0).getEntry();
 
   public static final NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
   public static final NetworkTableEntry lltx = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx");

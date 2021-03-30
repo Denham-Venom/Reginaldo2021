@@ -22,7 +22,7 @@ public class VisionAimPID extends PIDCommand {
   public VisionAimPID(Shooter shooter) {
     super(
         // The controller that the command will use
-        new PIDController(Robot.aimP.getDouble(0), Robot.aimI.getDouble(0), Robot.aimD.getDouble(0)),
+        new PIDController(Constants.SHOOT_AIM_P, Constants.SHOOT_AIM_I, Constants.SHOOT_AIM_D),
         // This should return the measurement
         () -> shooter.angleEncoder.getPosition(),
         // This should return the setpoint (can also be a constant)
@@ -31,7 +31,7 @@ public class VisionAimPID extends PIDCommand {
         output -> {
           double err = Robot.llty.getDouble(0);
           int sign = (int) (err / Math.abs(err));
-          output = output + sign * Robot.aimF.getDouble(0);
+          output = output + sign * Constants.SHOOT_AIM_F;
           shooter.setAngleMotorsSafe(output);
         });
     s = shooter;
@@ -47,13 +47,13 @@ public class VisionAimPID extends PIDCommand {
     Robot.ledMode.setDouble(0);
   }
 
-  @Override
-  public void execute() {
-    super.execute();
-    getController().setP(Robot.aimP.getDouble(0));
-    getController().setI(Robot.aimI.getDouble(0));
-    getController().setD(Robot.aimD.getDouble(0));
-  }
+  // @Override
+  // public void execute() {
+  //   super.execute();
+  //   getController().setP(Robot.aimP.getDouble(0));
+  //   getController().setI(Robot.aimI.getDouble(0));
+  //   getController().setD(Robot.aimD.getDouble(0));
+  // }
 
   @Override
   public void end(boolean interrupted) {

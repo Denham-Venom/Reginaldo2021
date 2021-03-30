@@ -55,8 +55,8 @@ public class Shooter extends SubsystemBase {
     targetRPM = shootRPM.getDouble(0);
     LP = leftP.getDouble(0);
     RP = rightP.getDouble(0);
-    shootMotorLeft.config_kP(Constants.kSlotIdx, LP, Constants.kTimeMS);
-    shootMotorRight.config_kP(Constants.kSlotIdx, RP, Constants.kTimeMS);
+    //shootMotorLeft.config_kP(Constants.kSlotIdx, LP, Constants.kTimeMS);
+    //shootMotorRight.config_kP(Constants.kSlotIdx, RP, Constants.kTimeMS);
   }
 
   public void setShooterMotors(double speed) {
@@ -145,12 +145,12 @@ public class Shooter extends SubsystemBase {
     shootMotorRight.configPeakOutputReverse(-Constants.PEAK_SHOOTER);
 //------------------------------------------------------------------------------
     shootMotorLeft.config_kF(Constants.kSlotIdx, 0, Constants.kTimeMS); //timeout maybe 30
-    shootMotorLeft.config_kP(Constants.kSlotIdx, 0, Constants.kTimeMS);
+    shootMotorLeft.config_kP(Constants.kSlotIdx, 0.4, Constants.kTimeMS);
     shootMotorLeft.config_kI(Constants.kSlotIdx, 0, Constants.kTimeMS);
     shootMotorLeft.config_kD(Constants.kSlotIdx, 0, Constants.kTimeMS);
 
     shootMotorRight.config_kF(Constants.kSlotIdx, 0, Constants.kTimeMS); //timeout maybe 30
-    shootMotorRight.config_kP(Constants.kSlotIdx, 0, Constants.kTimeMS);
+    shootMotorRight.config_kP(Constants.kSlotIdx, 0.3, Constants.kTimeMS);
     shootMotorRight.config_kI(Constants.kSlotIdx, 0, Constants.kTimeMS);
     shootMotorRight.config_kD(Constants.kSlotIdx, 0, Constants.kTimeMS);
 

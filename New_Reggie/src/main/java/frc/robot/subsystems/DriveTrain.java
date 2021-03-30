@@ -175,6 +175,10 @@ public class DriveTrain extends SubsystemBase {
     return feet * Constants.FEET_TO_ROT_UNITS;
   }
 
+  public double getPosition() {
+    return motorTopLeft.getSelectedSensorPosition() / Constants.FEET_TO_ROT_UNITS;
+  }
+
   public double getAverageEncoderDistanceFeet() {
     return (motorTopLeft.getSelectedSensorPosition() + motorTopRight.getSelectedSensorPosition()) * Constants.ENCODER_TICKS_TO_FEET / 2;
   }

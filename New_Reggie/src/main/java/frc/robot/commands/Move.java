@@ -4,13 +4,17 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.subsystems.DriveTrain;
 
 public class Move extends CommandBase {
   DriveTrain dt;
   double feet;
+  double start = 0;
+
   /** Creates a new Move. */
   public Move(DriveTrain dt, double feet) {
     this.dt = dt;
@@ -22,12 +26,16 @@ public class Move extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    feet = Robot.move.getDouble(0);
     dt.setWithPostion(feet);
+    start = dt.getPosition();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    SmartDashboard.putNumber("amount", dt.getPosition() / Constants.FEET_TO_ROT_UNITS - start);
+  }
 
   // Called once the command ends or is interrupted.
   @Override

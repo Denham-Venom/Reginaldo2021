@@ -17,7 +17,7 @@ public class ShootAndIndex extends CommandBase {
   double spinUpSpeed;
   double indexSpeed;
   long startTime;
-  double seconds;
+  double seconds = 5;
   long curTime;
 
   /** Creates a new ShootAndIndex. */
@@ -80,10 +80,9 @@ public class ShootAndIndex extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // if(curTime - startTime > seconds*1000) 
-    //{
-        //return true;
-    //}
+    if(curTime - startTime > seconds*1000) {
+        return true;
+    }
     return false;
   }
 }

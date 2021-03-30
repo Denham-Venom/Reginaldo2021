@@ -68,7 +68,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
     xButton.whenPressed(new InstantCommand(intake::toggleIntake));
 //---------------------------------------------------------------------
-    yButton.whenHeld(new AutoScore(drivetrain, intake, shooter, 0.3));
+    yButton.whenHeld(new AutoScore(drivetrain, intake, shooter));
 //---------------------------------------------------------------------
     aButton.whenPressed(new InstantCommand(drivetrain::invertDrive, drivetrain));
     bButton.whenPressed(new InstantCommand(drivetrain::hLGearSwitch, drivetrain));
@@ -78,7 +78,8 @@ public class RobotContainer {
     ltButton.toggleWhenPressed(new StartEndCommand(() ->  NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setDouble(0), () -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setDouble(1)));
     
     ltButton2.whenHeld(new StartEndCommand(() -> shooter.setShooterVelocity(), () -> shooter.setShooterMotors(0)));
-    rbButton2.whenHeld(new TurnToAngle(drivetrain, drivetrain.getAngle()));
+    rbButton2.whenHeld(new Move(drivetrain, 10));
+    //rbButton2.whenHeld(new AutoScore(drivetrain, intake, shoot))
     rtButton2.whenHeld(new IntakeBall(intake, Constants.INTAKE_BALL_SPEED));
     bButton2.whileHeld(new ShooterAngle(shooter, -Constants.ANGLE_MOTOR_SPEED));
     aButton2.whileHeld(new ShooterAngle(shooter, Constants.ANGLE_MOTOR_SPEED));
@@ -98,7 +99,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return new AutoScore(drivetrain, intake, shooter, .3);
+    return new AutoScore(drivetrain, intake, shooter);
     
   }
 }

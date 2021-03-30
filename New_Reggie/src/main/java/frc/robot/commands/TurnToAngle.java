@@ -23,7 +23,7 @@ public class TurnToAngle extends PIDCommand {
         // This should return the measurement
         () -> drivetrain.getAngle(),
         // This should return the setpoint (can also be a constant)
-        angle,
+        () -> angle,
         // This uses the output
         output -> {
           int sign = (int) (output / Math.abs(output));
@@ -45,6 +45,7 @@ public class TurnToAngle extends PIDCommand {
   public void initialize() {
     // TODO Auto-generated method stub
     super.initialize();
+
     SmartDashboard.putNumber("turn sp", ang);
   }
 
@@ -58,7 +59,7 @@ public class TurnToAngle extends PIDCommand {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    //return getController().atSetpoint();
-    return false;
+    return getController().atSetpoint();
+    //return false;
   }
 }

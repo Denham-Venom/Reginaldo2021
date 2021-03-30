@@ -26,17 +26,18 @@ import frc.robot.subsystems.Shooter;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AutoScore extends SequentialCommandGroup {
 
-  private double green = 15; //feet
-  private double yellow = 15;
-  private double blue = 15;
-  private double red = 15;
+  private double green = 10; //feet
+  private double yellow = 10;
+  private double blue = 10;
+  private double red = 10;
+  private double startAngle;
 
   /** Creates a new AutoScore. */
-  public AutoScore(DriveTrain dt, Intake intake, Shooter shoot, double speed) {
+  public AutoScore(DriveTrain dt, Intake intake, Shooter shoot) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    double startAngle = dt.getAngle();
     addCommands(
+      new InstantCommand(() -> startAngle = dt.getAngle()),
       new InstantCommand(intake::extendIntake),
 
       new VisionTurnThenAim(dt, shoot),
