@@ -4,24 +4,19 @@
 
 package frc.robot.subsystems;
 
-import java.util.ResourceBundle.Control;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 
-import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Robot;
 
 public class Shooter extends SubsystemBase {
 
@@ -29,8 +24,9 @@ public class Shooter extends SubsystemBase {
   NetworkTableEntry leftP = Shuffleboard.getTab("Tuning").add("LS VP", 0).getEntry();
   NetworkTableEntry rightP = Shuffleboard.getTab("Tuning").add("RS VP", 0).getEntry();
   double targetRPM = 0;
-  double LP = 0;
-  double RP = 0;
+  double LP;
+  double RP;
+  boolean tuningEnable = false;
 
   double speed;
   private final TalonFX shootMotorLeft = new TalonFX(Constants.SHOOT_MOTOR_LEFT_ID);
@@ -53,10 +49,29 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("R Shoot RPM", getRightShooterRPM());
 
     targetRPM = shootRPM.getDouble(0);
-    LP = leftP.getDouble(0);
-    RP = rightP.getDouble(0);
-    //shootMotorLeft.config_kP(Constants.kSlotIdx, LP, Constants.kTimeMS);
-    //shootMotorRight.config_kP(Constants.kSlotIdx, RP, Constants.kTimeMS);
+    
+    if(Robot.tuningEnable.getBoolean(false)) {
+      tuningEnable = true;
+
+      double lastLP = LP;
+      LP = leftP.getDouble(0);
+      if(lastLP != LP) {
+        shootMotorLeft.config_kP(Constants.kSlotIdx, LP, Constants.kTimeMS);
+      }
+
+      double lastRP = RP;
+      RP = rightP.getDouble(0);
+      if(lastRP != RP) {
+        shootMotorRight.config_kP(Constants.kSlotIdx, RP, Constants.kTimeMS);
+      }
+    } else if(!tuningEnable) {
+      LP = Constants.SHOOT_LEFT_VEL_P;
+      shootMotorLeft.config_kP(Constants.kSlotIdx, LP, Constants.kTimeMS);
+
+      RP = Constants.SHOOT_RIGHT_VEL_P;
+      shootMotorRight.config_kP(Constants.kSlotIdx, RP, Constants.kTimeMS);
+    }
+    
   }
 
   public void setShooterMotors(double speed) {
@@ -144,13 +159,15 @@ public class Shooter extends SubsystemBase {
     shootMotorRight.configPeakOutputForward(Constants.PEAK_SHOOTER);
     shootMotorRight.configPeakOutputReverse(-Constants.PEAK_SHOOTER);
 //------------------------------------------------------------------------------
+    LP = Constants.SHOOT_LEFT_VEL_P;
     shootMotorLeft.config_kF(Constants.kSlotIdx, 0, Constants.kTimeMS); //timeout maybe 30
-    shootMotorLeft.config_kP(Constants.kSlotIdx, 0.4, Constants.kTimeMS);
+    shootMotorLeft.config_kP(Constants.kSlotIdx, LP, Constants.kTimeMS);
     shootMotorLeft.config_kI(Constants.kSlotIdx, 0, Constants.kTimeMS);
     shootMotorLeft.config_kD(Constants.kSlotIdx, 0, Constants.kTimeMS);
 
+    RP = Constants.SHOOT_RIGHT_VEL_P;
     shootMotorRight.config_kF(Constants.kSlotIdx, 0, Constants.kTimeMS); //timeout maybe 30
-    shootMotorRight.config_kP(Constants.kSlotIdx, 0.3, Constants.kTimeMS);
+    shootMotorRight.config_kP(Constants.kSlotIdx, RP, Constants.kTimeMS);
     shootMotorRight.config_kI(Constants.kSlotIdx, 0, Constants.kTimeMS);
     shootMotorRight.config_kD(Constants.kSlotIdx, 0, Constants.kTimeMS);
 

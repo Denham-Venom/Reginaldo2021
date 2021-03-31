@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -15,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 import frc.robot.commands.auto.AutoScore;
-import frc.robot.commands.auto.MoveShoot;
 /**
  * This class is where the bulk of the robot should be declared. Since
  * Command-based is a "declarative" paradigm, very little robot logic should
@@ -24,38 +21,77 @@ import frc.robot.commands.auto.MoveShoot;
  * commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-
+  
+  // Joystick 0
   private final Joystick pilotDriverController = new Joystick(0);
+
+  // A - Invert Drive Direction
+  private final JoystickButton aButton = new JoystickButton(pilotDriverController, Constants.ABUTTON);
+
+  // B - Switch Gear (H/L)
+  private final JoystickButton bButton = new JoystickButton(pilotDriverController, Constants.BBUTTON);
+
+  // X - Toggle Intake Extension
+  private final JoystickButton xButton = new JoystickButton(pilotDriverController, Constants.XBUTTON);
+
+  // Y - Aim and Shoot (Vision)
+  private final JoystickButton yButton = new JoystickButton(pilotDriverController, Constants.YBUTTON);
+
+  // LB - Test Control
+  private final JoystickButton lbButton = new JoystickButton(pilotDriverController, Constants.LBBUTTON);
+
+  // RB - Test Control
+  private final JoystickButton rbButton = new JoystickButton(pilotDriverController, Constants.RBBUTTON);
+  
+  // LT - Toggle Limelight Mode
+  private final JoystickButton ltButton = new JoystickButton(pilotDriverController, Constants.ltBUTTON);
+
+  // RT - Intake
+  private final JoystickButton rtButton = new JoystickButton(pilotDriverController, Constants.rtBUTTON);
+  
+ 
+  // Joystick 1
   private final Joystick copilotDriverController = new Joystick(1);
 
-  private final JoystickButton aButton = new JoystickButton(pilotDriverController, Constants.ABUTTON);
-  private final JoystickButton bButton = new JoystickButton(pilotDriverController, Constants.BBUTTON);
-  private final JoystickButton xButton = new JoystickButton(pilotDriverController, Constants.XBUTTON);
-  private final JoystickButton yButton = new JoystickButton(pilotDriverController, Constants.YBUTTON);
-  private final JoystickButton rbButton = new JoystickButton(pilotDriverController, Constants.RBBUTTON);
-  private final JoystickButton lbButton = new JoystickButton(pilotDriverController, Constants.LBBUTTON);
-  private final JoystickButton rtButton = new JoystickButton(pilotDriverController, Constants.rtBUTTON);
-  private final JoystickButton ltButton = new JoystickButton(pilotDriverController, Constants.ltBUTTON);
- 
+  // A - Spinup Out
   private final JoystickButton aButton2 = new JoystickButton(copilotDriverController, Constants.ABUTTON);
+
+  // B - Spinup In
   private final JoystickButton bButton2 = new JoystickButton(copilotDriverController, Constants.BBUTTON);
+
+  // X - Shoot and Index
   private final JoystickButton xButton2 = new JoystickButton(copilotDriverController, Constants.XBUTTON);
+
+  // Y - Aim and Shoot
   private final JoystickButton yButton2 = new JoystickButton(copilotDriverController, Constants.YBUTTON);
-  private final JoystickButton rtButton2 = new JoystickButton(copilotDriverController, Constants.rtBUTTON);
-  private final JoystickButton ltButton2 = new JoystickButton(copilotDriverController, Constants.ltBUTTON);
-  private final JoystickButton rbButton2 = new JoystickButton(copilotDriverController, Constants.RBBUTTON);
+
+  // LB - Index Out
   private final JoystickButton lbButton2 = new JoystickButton(copilotDriverController, Constants.LBBUTTON);
 
-  // The robot's subsystems and commands are defined here...
+  // RB - Index In
+  private final JoystickButton rbButton2 = new JoystickButton(copilotDriverController, Constants.RBBUTTON);
+
+  // LT - Intake Out
+  private final JoystickButton ltButton2 = new JoystickButton(copilotDriverController, Constants.ltBUTTON);
+
+  // RT - Intake In
+  private final JoystickButton rtButton2 = new JoystickButton(copilotDriverController, Constants.rtBUTTON);
+
+
+  // Subsystems
   private final DriveTrain drivetrain = new DriveTrain();
   private final Shooter shooter = new Shooter();
   private final Intake intake = new Intake();
+
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+
+    // Set default commands
     setDefaultCommands();
   }
 
@@ -66,26 +102,31 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    xButton.whenPressed(new InstantCommand(intake::toggleIntake));
-//---------------------------------------------------------------------
-    yButton.whenHeld(new AutoScore(drivetrain, intake, shooter));
-//---------------------------------------------------------------------
+
+    //----------Joystick 0 Controls----------//
     aButton.whenPressed(new InstantCommand(drivetrain::invertDrive, drivetrain));
     bButton.whenPressed(new InstantCommand(drivetrain::hLGearSwitch, drivetrain));
-    rtButton.whenHeld(new IntakeBall(intake, Constants.INTAKE_BALL_SPEED));
-    rbButton.whileHeld(new StartEndCommand(() -> intake.setSpinUpMotor(Constants.SPIN_UP_SPEED), () -> intake.setSpinUpMotor(0)));
-    lbButton.whileHeld(new StartEndCommand(() -> intake.setSpinUpMotor(-Constants.SPIN_UP_SPEED), () -> intake.setSpinUpMotor(0)));
+    xButton.whenPressed(new InstantCommand(intake::toggleIntake));
+    yButton.whenHeld(new AimAndShoot(drivetrain, shooter, intake));
     ltButton.toggleWhenPressed(new StartEndCommand(() ->  NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setDouble(0), () -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setDouble(1)));
-    
-    ltButton2.whenHeld(new StartEndCommand(() -> shooter.setShooterVelocity(), () -> shooter.setShooterMotors(0)));
-    rbButton2.whenHeld(new Move(drivetrain, 10));
-    //rbButton2.whenHeld(new AutoScore(drivetrain, intake, shoot))
-    rtButton2.whenHeld(new IntakeBall(intake, Constants.INTAKE_BALL_SPEED));
-    bButton2.whileHeld(new ShooterAngle(shooter, -Constants.ANGLE_MOTOR_SPEED));
-    aButton2.whileHeld(new ShooterAngle(shooter, Constants.ANGLE_MOTOR_SPEED));
-    yButton2.whenHeld(new StartEndCommand(() -> drivetrain.setWithPostion(9.5), () -> drivetrain.stopMotors(), drivetrain));
-    xButton2.whileHeld(new ShootAndIndex(intake, shooter));
-    lbButton2.whileHeld(new StartEndCommand(() -> intake.setIndexerMotor(Constants.INDEXER_SPEED), () -> intake.setIndexerMotor(0)));
+    rtButton.whenHeld(new StartEndCommand(() -> intake.setIntakeMotor(Constants.INTAKE_BALL_SPEED), () -> intake.setIntakeMotor(0)));
+
+
+    //----------Joystick 1 Controls----------//
+    aButton2.whileHeld(new StartEndCommand(() -> intake.setSpinUpMotor(-Constants.SPIN_UP_SPEED), () -> intake.setSpinUpMotor(0)));
+    bButton2.whileHeld(new StartEndCommand(() -> intake.setSpinUpMotor(Constants.SPIN_UP_SPEED), () -> intake.setSpinUpMotor(0)));
+    xButton2.whenHeld(new ShootAndIndex(intake, shooter));
+    yButton2.whenHeld(new AimAndShoot(drivetrain, shooter, intake));
+    lbButton2.whileHeld(new StartEndCommand(() -> intake.setIndexerMotor(-Constants.INDEXER_SPEED), () -> intake.setIndexerMotor(0)));
+    rbButton2.whileHeld(new StartEndCommand(() -> intake.setIndexerMotor(Constants.INDEXER_SPEED), () -> intake.setIndexerMotor(0)));
+    ltButton2.whileHeld(new StartEndCommand(() -> intake.setIntakeMotor(-Constants.INTAKE_BALL_SPEED), () -> intake.setIntakeMotor(0)));
+    rtButton2.whileHeld(new StartEndCommand(() -> intake.setIntakeMotor(Constants.INTAKE_BALL_SPEED), () -> intake.setIntakeMotor(0)));
+
+
+    //----------Test Controls----------//
+    lbButton.whenHeld(new VisionTurnThenAim(drivetrain, shooter)); //vision
+    rbButton.whileHeld(new StartEndCommand(() -> shooter.setShooterVelocity(), 
+                                           () -> shooter.setShooterMotors(0))); //sets shooter velocity with shuffleboard rpm
   }
 
   private void setDefaultCommands() {

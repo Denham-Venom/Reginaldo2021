@@ -14,6 +14,7 @@ import frc.robot.subsystems.DriveTrain;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class TurnToAngle extends PIDCommand {
+  DriveTrain dt;
   double ang;
   /** Creates a new TurnToAngle. */
   public TurnToAngle(DriveTrain drivetrain, double angle) {
@@ -34,6 +35,7 @@ public class TurnToAngle extends PIDCommand {
         drivetrain
     );
     ang = angle;
+    dt = drivetrain;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
     // Configure additional PID options by calling `getController` here.
@@ -54,6 +56,12 @@ public class TurnToAngle extends PIDCommand {
     // TODO Auto-generated method stub
     super.execute();
     SmartDashboard.putNumber("turn err", getController().getPositionError());
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+    super.end(interrupted);
+    dt.stopMotors();
   }
 
   // Returns true when the command should end.

@@ -23,10 +23,14 @@ public class Move extends CommandBase {
     //addRequirements(dt);
   }
 
+  public Move(DriveTrain dt) {
+    this.dt = dt;
+    feet = Robot.move.getDouble(0);
+  }
+
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    feet = Robot.move.getDouble(0);
     dt.setWithPostion(feet);
     start = dt.getPosition();
   }

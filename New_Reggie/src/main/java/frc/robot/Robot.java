@@ -13,16 +13,30 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.Button;
+import edu.wpi.first.wpilibj2.command.button.NetworkButton;
 
 /**
- * The VM is configured to automatically run this class, and to call the functions corresponding to
- * each mode, as described in the TimedRobot documentation. If you change the name of this class or
- * the package after creating this project, you must also update the build.gradle file in the
+ * The VM is configured to automatically run this class, and to call the
+ * functions corresponding to each mode, as described in the TimedRobot
+ * documentation. If you change the name of this class or the package after
+ * creating this project, you must also update the build.gradle file in the
  * project.
  */
 public class Robot extends TimedRobot {
 
   public static final ShuffleboardTab tuning = Shuffleboard.getTab("Tuning");
+  public static final NetworkTableEntry tuningEnable = tuning.add("Tuning Enabled", false).getEntry();
+  public static final Button useShuffleboardBtn = new NetworkButton(tuningEnable).whenPressed(new InstantCommand(() -> {
+    boolean cur = tuningEnable.getBoolean(false);
+    tuningEnable.setBoolean(!cur);
+  }));
+
+  public static final NetworkTableEntry moveP = tuning.add("M P", 0).getEntry();
+  public static final NetworkTableEntry moveI = tuning.add("M I", 0).getEntry();
+  public static final NetworkTableEntry moveD = tuning.add("M D", 0).getEntry();
+  public static final NetworkTableEntry moveF = tuning.add("M F", 0).getEntry();
   public static final NetworkTableEntry steerP = tuning.add("S P", 0).getEntry();
   public static final NetworkTableEntry steerI = tuning.add("S I", 0).getEntry();
   public static final NetworkTableEntry steerD = tuning.add("S D", 0).getEntry();
