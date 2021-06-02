@@ -24,13 +24,15 @@ public final class Constants
 	public static final int SHOOT_MOTOR_LEFT_ID = 5;
 	public static final int SHOOT_MOTOR_RIGHT_ID = 6;
 
+	public static final int INDEXER_MOTOR_1 = 7; //Left
+	public static final int INDEXER_MOTOR_2 = 8; //Right
+
 	public static final int INTAKE_MOTOR_ID = 10; // spark #1
 	public static final int SPIN_UP_MOTOR = 12; // spark #2
 	public static final int ADJUST_ANGLE_MOTOR_LEFT = 11; // spark #3
 	public static final int ADJUST_ANGLE_MOTOR_RIGHT = 9; // spark #4	
 
-	public static final int INDEXER_MOTOR_1 = 7; //Left
-	public static final int INDEXER_MOTOR_2 = 8; //Right
+	
 //-----------------------------------------------------    
 //Buttons/Axis defined here
 	public static final int XBUTTON = 1;

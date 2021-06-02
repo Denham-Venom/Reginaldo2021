@@ -137,7 +137,7 @@ public class VisionAim extends CommandBase {
     final double AUTODRIVE = 0.0;
     final double DESIRED_TARGET_AREA = 0.0;
     final double speedLimit = 0.5;
-    final double angleSpeedLimit = 0.3;
+    final double angleSpeedLimit = 0.2;
     final double steerLimit = 0.25;
 
     double tv = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0);

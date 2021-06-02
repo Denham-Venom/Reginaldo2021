@@ -171,4 +171,10 @@ public class Shooter extends SubsystemBase {
     angleEncoder.setPositionConversionFactor(Constants.ADJUST_ROTS_TO_DEGR);
   }
   
+
+
+  //public void resetAngleEncoders() {
+    //adjustAngleMotorLeft.setSelectedSensorPosition(0);
+    //adjustAngleMotorRight.setSelectedSensorPosition(0);
+ // }
 }
