@@ -12,7 +12,6 @@ import frc.robot.commands.Move;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.ShootAndIndex;
 import frc.robot.commands.TurnToAngle;
-import frc.robot.commands.VisionAim;
 import frc.robot.commands.VisionTurnThenAim;
 import frc.robot.Constants;
 import frc.robot.commands.IntakeBall;
@@ -45,7 +44,7 @@ public class AutoScore extends SequentialCommandGroup {
       new TurnToAngle(dt, startAngle), //resetangle
       new Move(dt, -green),//goback
       new TurnToAngle(dt, startAngle), //resetangle
-      new IntakeBall(intake, Constants.INTAKE_BALL_SPEED),//getballs
+      new IntakeBall(intake),//getballs
       new Move(dt, yellow),//gotoyellow
 
       new VisionTurnThenAim(dt, shoot),//aimandshoot
@@ -53,7 +52,7 @@ public class AutoScore extends SequentialCommandGroup {
       new TurnToAngle(dt, startAngle), //resetangle
       new Move(dt, -yellow), //goback
       new TurnToAngle(dt, startAngle), //resetangle
-      new IntakeBall(intake, Constants.INTAKE_BALL_SPEED),//getballs
+      new IntakeBall(intake),//getballs
       new Move(dt, blue),//gotoblue
 
       new VisionTurnThenAim(dt, shoot), // aimandshoot
@@ -61,7 +60,7 @@ public class AutoScore extends SequentialCommandGroup {
       new TurnToAngle(dt, startAngle), //resetangle
       new Move(dt, -blue), // goback
       new TurnToAngle(dt, startAngle), //resetangle
-      new IntakeBall(intake, Constants.INTAKE_BALL_SPEED), // getballs
+      new IntakeBall(intake), // getballs
       new TurnToAngle(dt, startAngle), //resetangle
       new Move(dt, red), // gotored
 
@@ -70,7 +69,7 @@ public class AutoScore extends SequentialCommandGroup {
       new TurnToAngle(dt, startAngle), //resetangle
       new Move(dt, -red),//goback
       new TurnToAngle(dt, startAngle), //resetangle
-      new IntakeBall(intake, Constants.INTAKE_BALL_SPEED),//getballs
+      new IntakeBall(intake),//getballs
       new TurnToAngle(dt, startAngle), //resetangle
       new Move(dt, red),//gotored
 

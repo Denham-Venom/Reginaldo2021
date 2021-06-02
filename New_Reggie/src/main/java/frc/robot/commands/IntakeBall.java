@@ -7,24 +7,37 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.Intake;
 
 public class IntakeBall extends CommandBase {
   private final Intake intake;
   private double speed;
-  double start = 0;
-  double runtime = 0;
+  private double start = 0;
+  private double runtime = 0;
+  private final double time;
 
 
   /**
    * Creates a new IntakeBall.
    */
-  public IntakeBall(Intake intake, double speed) {
+  public IntakeBall(Intake intake, double speed, double time) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.intake = intake;
     this.speed = speed;
+    this.time = time;
+    //addRequirements(intake);
+  }
+
+  /**
+   * Creates a new IntakeBall.
+   */
+  public IntakeBall(Intake intake) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    this.intake = intake;
+    this.speed = Constants.INTAKE_BALL_SPEED;
+    this.time = Constants.INTAKE_DEFAULT_TIME;
     //addRequirements(intake);
   }
 

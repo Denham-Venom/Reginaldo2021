@@ -5,10 +5,10 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 import frc.robot.Constants;
 import frc.robot.Robot;
-import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Shooter;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -18,6 +18,7 @@ public class VisionAimPID extends PIDCommand {
 
   private final Shooter s;
 
+
   /** Creates a new VisionAimPID. */
   public VisionAimPID(Shooter shooter) {
     super(
@@ -26,11 +27,9 @@ public class VisionAimPID extends PIDCommand {
         // This should return the measurement
         () -> shooter.angleEncoder.getPosition(),
         // This should return the setpoint (can also be a constant)
-        () -> (Robot.lltv.getDouble(0) == 1) ? (Robot.llty.getDouble(0) /*+ Constants.LL_ANG*/) * Constants.CAM_ANG_TO_SHOOT_ANG /*- shooter.angleEncoder.getPosition()*/ : 0, //0 is when shooter is bottomed out, tv = 1 means target found
-        // This uses the output
+        () -> (Robot.lltv.getDouble(0) == 1) ? Math.toDegrees(Math.atan( (85.5/12.)/getDistanceToTarget() )) - Robot.aimAngFF.getDouble(0)/*Constants.SHOOT_AIM_ANG_FF*/ : 0, //0 is when shooter is bottomed out, tv = 1 means target found
         output -> {
-          double err = Robot.llty.getDouble(0);
-          int sign = (int) (err / Math.abs(err));
+          int sign = (int) (output / Math.abs(output));
           output = output + sign * Constants.SHOOT_AIM_F;
           shooter.setAngleMotorsSafe(output);
         });
@@ -41,19 +40,49 @@ public class VisionAimPID extends PIDCommand {
     getController().setTolerance(Constants.ALLOWABLE_AIM_ERR);
   }
 
+
+  /** Creates a new VisionAimPID. */
+  public VisionAimPID(Shooter shooter, double aimAngFF) {
+    super(
+        // The controller that the command will use
+        new PIDController(Constants.SHOOT_AIM_P, Constants.SHOOT_AIM_I, Constants.SHOOT_AIM_D),
+        // This should return the measurement
+        () -> shooter.angleEncoder.getPosition(),
+        // This should return the setpoint (can also be a constant)
+        () -> (Robot.lltv.getDouble(0) == 1) ? Math.toDegrees(Math.atan( (85.5/12.)/getDistanceToTarget() )) - aimAngFF/*Constants.SHOOT_AIM_ANG_FF*/ : 0, //0 is when shooter is bottomed out, tv = 1 means target found
+        output -> {
+          int sign = (int) (output / Math.abs(output));
+          output = output + sign * Constants.SHOOT_AIM_F;
+          shooter.setAngleMotorsSafe(output);
+        });
+    s = shooter;
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(shooter);
+    // Configure additional PID options by calling `getController` here.
+    getController().setTolerance(Constants.ALLOWABLE_AIM_ERR);
+  }
+
+
   @Override
   public void initialize() {
     super.initialize();
     Robot.ledMode.setDouble(0);
   }
 
-  // @Override
-  // public void execute() {
-  //   super.execute();
-  //   getController().setP(Robot.aimP.getDouble(0));
-  //   getController().setI(Robot.aimI.getDouble(0));
-  //   getController().setD(Robot.aimD.getDouble(0));
-  // }
+  @Override
+  public void execute() {
+    super.execute();
+    SmartDashboard.putNumber("ssp", getController().getSetpoint());
+    // if(Robot.tuningEnable.getBoolean(false)) { //TODO see VisionTurnPID
+    //   getController().setP(Robot.aimP.getDouble(0));
+    //   getController().setI(Robot.aimI.getDouble(0));
+    //   getController().setD(Robot.aimD.getDouble(0));
+    // } else {
+    //   getController().setP(Constants.SHOOT_AIM_P);
+    //   getController().setI(Constants.SHOOT_AIM_I);
+    //   getController().setD(Constants.SHOOT_AIM_D);
+    // }
+  }
 
   @Override
   public void end(boolean interrupted) {
@@ -66,5 +95,15 @@ public class VisionAimPID extends PIDCommand {
   @Override
   public boolean isFinished() {
     return getController().atSetpoint();
+  }
+
+  private static double getDistanceToTarget() {
+    final double h1 = 1.75; //feet = 21 inches
+    final double h2 = 91/12; //feet = 91 in
+    final double a1 = 10; //degrees
+    double a2 = Robot.llty.getDouble(0);
+    double d = (h2-h1) / Math.tan(Math.toRadians(a1+a2));
+    SmartDashboard.putNumber("distance", d);
+    return d; //d = (h2-h1) / tan(a1+a2);
   }
 }

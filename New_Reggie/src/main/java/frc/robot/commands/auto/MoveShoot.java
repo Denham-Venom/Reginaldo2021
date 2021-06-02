@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.Move;
 import frc.robot.commands.ShootAndIndex;
-import frc.robot.commands.VisionAim;
+import frc.robot.commands.VisionTurnThenAim;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -24,7 +24,7 @@ public class MoveShoot extends SequentialCommandGroup {
     addCommands(
       new InstantCommand(() -> i.extendIntake()),
       new Move(dt, 2),
-      new VisionAim(dt, s),
+      new VisionTurnThenAim(dt, s),
       new ShootAndIndex(i, s, RPM, spinUpSpeed, indexSpeed, shootTime)
       );
   }

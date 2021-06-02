@@ -5,21 +5,23 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class VisionTurnThenAim extends SequentialCommandGroup {
-  /** Creates a new VisionTurnThenAim. */
-  public VisionTurnThenAim(DriveTrain driveTrain, Shooter shooter) {
+public class AimAndShootRedZone extends SequentialCommandGroup {
+  /** Creates a new AimAndShootRedZone. */
+  public AimAndShootRedZone(DriveTrain dt, Shooter shooter, Intake intake) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new VisionTurnPID(driveTrain),
-      new VisionAimPID(shooter)
+      new VisionTurnPID(dt), 
+      new VisionAimPID(shooter, Constants.SHOOTER_REDZONE_AIM_ANG_FF), 
+      new ShootAndIndex(intake, shooter, Constants.SHOOTER_REDZONE_VEL)
     );
-    //Robot.ledMode.setDouble(3);
   }
 }
