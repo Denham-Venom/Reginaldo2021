@@ -113,26 +113,42 @@ public class RobotContainer {
 
 
     //----------Joystick 1 Controls----------//
-    aButton2.whileHeld(new StartEndCommand(() -> intake.setSpinUpMotor(-Constants.SPIN_UP_SPEED), () -> intake.setSpinUpMotor(0)));
-    bButton2.whileHeld(new StartEndCommand(() -> intake.setSpinUpMotor(Constants.SPIN_UP_SPEED), () -> intake.setSpinUpMotor(0)));
-    xButton2.whenHeld(new ShootAndIndex(intake, shooter));
-    yButton2.whenHeld(new AimAndShoot(drivetrain, shooter, intake));
-    lbButton2.whileHeld(new StartEndCommand(() -> intake.setIndexerMotor(-Constants.INDEXER_SPEED), () -> intake.setIndexerMotor(0)));
-    rbButton2.whileHeld(new StartEndCommand(() -> intake.setIndexerMotor(Constants.INDEXER_SPEED), () -> intake.setIndexerMotor(0)));
-    ltButton2.whileHeld(new StartEndCommand(() -> intake.setIntakeMotor(-Constants.INTAKE_BALL_SPEED), () -> intake.setIntakeMotor(0)));
-    rtButton2.whileHeld(new StartEndCommand(() -> intake.setIntakeMotor(Constants.INTAKE_BALL_SPEED), () -> intake.setIntakeMotor(0)));
+    // A - Green Zone
+    aButton2.whenHeld(new AimAndShootGreenZone(drivetrain, shooter, intake));
+    // B - Red Zone
+    bButton2.whenHeld(new AimAndShootRedZone(drivetrain, shooter, intake));
+    // X - Blue Zone
+    xButton2.whenHeld(new AimAndShootBlueZone(drivetrain, shooter, intake));
+    // Y - Yellow Zone
+    yButton2.whenHeld(new AimAndShootYellowZone(drivetrain, shooter, intake));
+    lbButton2.whenHeld(new StartEndCommand(() -> shooter.setAngleMotor(.1), () -> shooter.setAngleMotor(0)));
+    rbButton2.whenHeld(new StartEndCommand(() -> shooter.setAngleMotor(-.1), () -> shooter.setAngleMotor(0)));
+    //aButton2.whileHeld(new StartEndCommand(() -> intake.setSpinUpMotor(-Constants.SPIN_UP_SPEED), () -> intake.setSpinUpMotor(0)));
+    //bButton2.whileHeld(new StartEndCommand(() -> intake.setSpinUpMotor(Constants.SPIN_UP_SPEED), () -> intake.setSpinUpMotor(0)));
+    //xButton2.whenHeld(new ShootAndIndex(intake, shooter));
+    //yButton2.whenHeld(new AimAndShoot(drivetrain, shooter, intake));
+    //lbButton2.whileHeld(new StartEndCommand(() -> intake.setIndexerMotor(-Constants.INDEXER_SPEED), () -> intake.setIndexerMotor(0)));
+    //rbButton2.whileHeld(new StartEndCommand(() -> intake.setIndexerMotor(Constants.INDEXER_SPEED), () -> intake.setIndexerMotor(0)));
+    //ltButton2.whileHeld(new StartEndCommand(() -> intake.setIntakeMotor(-Constants.INTAKE_BALL_SPEED), () -> intake.setIntakeMotor(0)));
+    //rtButton2.whileHeld(new StartEndCommand(() -> intake.setIntakeMotor(Constants.INTAKE_BALL_SPEED), () -> intake.setIntakeMotor(0)));
 
 
     //----------Test Controls----------//
     lbButton.whenHeld(new VisionTurnThenAim(drivetrain, shooter)); //vision
-    rbButton.whileHeld(new StartEndCommand(() -> shooter.setShooterVelocity(), 
-                                           () -> shooter.setShooterMotors(0))); //sets shooter velocity with shuffleboard rpm
+    rbButton.whenHeld(new ShootAndIndex(intake, shooter));
+    // rbButton.whileHeld(new StartEndCommand(() -> shooter.setShooterVelocity(), 
+    //                                        () -> shooter.setShooterMotors(0))); //sets shooter velocity with shuffleboard rpm
+    //aButton2.whenHeld(new StartEndCommand(() -> shooter.setAngleMotor(.1), () -> shooter.setAngleMotor(0) ));
+    //bButton2.whenHeld(new StartEndCommand(() -> shooter.setAngleMotor(-.1), () -> shooter.setAngleMotor(0) ));
   }
 
   private void setDefaultCommands() {
     drivetrain.setDefaultCommand(new ArcadeDrive(drivetrain, pilotDriverController));
   }
 
+  public void zeroShooterAngle() {
+    shooter.zeroEncoder();
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

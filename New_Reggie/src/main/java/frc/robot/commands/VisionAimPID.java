@@ -18,6 +18,7 @@ public class VisionAimPID extends PIDCommand {
 
   private final Shooter s;
 
+
   /** Creates a new VisionAimPID. */
   public VisionAimPID(Shooter shooter) {
     super(
@@ -26,14 +27,10 @@ public class VisionAimPID extends PIDCommand {
         // This should return the measurement
         () -> shooter.angleEncoder.getPosition(),
         // This should return the setpoint (can also be a constant)
-        () -> (Robot.lltv.getDouble(0) == 1) ? Math.atan(Math.toRadians((85.5/12)/getDistanceToTarget())) : 0, //0 is when shooter is bottomed out, tv = 1 means target found
+        () -> (Robot.lltv.getDouble(0) == 1) ? Math.toDegrees(Math.atan( (85.5/12.)/getDistanceToTarget() )) - Robot.aimAngFF.getDouble(0)/*Constants.SHOOT_AIM_ANG_FF*/ : 0, //0 is when shooter is bottomed out, tv = 1 means target found
         output -> {
           int sign = (int) (output / Math.abs(output));
-          if(Robot.tuningEnable.getBoolean(false)) {
-            output = output + sign * Robot.aimF.getDouble(0);
-          } else {
-            output = output + sign * Constants.SHOOT_AIM_F;
-          }
+          output = output + sign * Constants.SHOOT_AIM_F;
           shooter.setAngleMotorsSafe(output);
         });
     s = shooter;
@@ -42,6 +39,29 @@ public class VisionAimPID extends PIDCommand {
     // Configure additional PID options by calling `getController` here.
     getController().setTolerance(Constants.ALLOWABLE_AIM_ERR);
   }
+
+
+  /** Creates a new VisionAimPID. */
+  public VisionAimPID(Shooter shooter, double aimAngFF) {
+    super(
+        // The controller that the command will use
+        new PIDController(Constants.SHOOT_AIM_P, Constants.SHOOT_AIM_I, Constants.SHOOT_AIM_D),
+        // This should return the measurement
+        () -> shooter.angleEncoder.getPosition(),
+        // This should return the setpoint (can also be a constant)
+        () -> (Robot.lltv.getDouble(0) == 1) ? Math.toDegrees(Math.atan( (85.5/12.)/getDistanceToTarget() )) - aimAngFF/*Constants.SHOOT_AIM_ANG_FF*/ : 0, //0 is when shooter is bottomed out, tv = 1 means target found
+        output -> {
+          int sign = (int) (output / Math.abs(output));
+          output = output + sign * Constants.SHOOT_AIM_F;
+          shooter.setAngleMotorsSafe(output);
+        });
+    s = shooter;
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(shooter);
+    // Configure additional PID options by calling `getController` here.
+    getController().setTolerance(Constants.ALLOWABLE_AIM_ERR);
+  }
+
 
   @Override
   public void initialize() {
@@ -52,15 +72,16 @@ public class VisionAimPID extends PIDCommand {
   @Override
   public void execute() {
     super.execute();
-    if(Robot.tuningEnable.getBoolean(false)) { //TODO see VisionTurnPID
-      getController().setP(Robot.aimP.getDouble(0));
-      getController().setI(Robot.aimI.getDouble(0));
-      getController().setD(Robot.aimD.getDouble(0));
-    } else {
-      getController().setP(Constants.SHOOT_AIM_P);
-      getController().setI(Constants.SHOOT_AIM_I);
-      getController().setD(Constants.SHOOT_AIM_D);
-    }
+    SmartDashboard.putNumber("ssp", getController().getSetpoint());
+    // if(Robot.tuningEnable.getBoolean(false)) { //TODO see VisionTurnPID
+    //   getController().setP(Robot.aimP.getDouble(0));
+    //   getController().setI(Robot.aimI.getDouble(0));
+    //   getController().setD(Robot.aimD.getDouble(0));
+    // } else {
+    //   getController().setP(Constants.SHOOT_AIM_P);
+    //   getController().setI(Constants.SHOOT_AIM_I);
+    //   getController().setD(Constants.SHOOT_AIM_D);
+    // }
   }
 
   @Override
@@ -81,6 +102,8 @@ public class VisionAimPID extends PIDCommand {
     final double h2 = 91/12; //feet = 91 in
     final double a1 = 10; //degrees
     double a2 = Robot.llty.getDouble(0);
-    return (h2-h1) / Math.tan(Math.toRadians(a1+a2)); //d = (h2-h1) / tan(a1+a2);
+    double d = (h2-h1) / Math.tan(Math.toRadians(a1+a2));
+    SmartDashboard.putNumber("distance", d);
+    return d; //d = (h2-h1) / tan(a1+a2);
   }
 }

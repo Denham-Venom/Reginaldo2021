@@ -21,11 +21,19 @@ import frc.robot.Robot;
 public class Shooter extends SubsystemBase {
 
   NetworkTableEntry shootRPM = Shuffleboard.getTab("Tuning").add("RPM", 0).getEntry();
-  NetworkTableEntry leftP = Shuffleboard.getTab("Tuning").add("LS VP", 0).getEntry();
-  NetworkTableEntry rightP = Shuffleboard.getTab("Tuning").add("RS VP", 0).getEntry();
+  // NetworkTableEntry leftP = Shuffleboard.getTab("Tuning").add("LS VP", 0).getEntry();
+  // NetworkTableEntry rightP = Shuffleboard.getTab("Tuning").add("RS VP", 0).getEntry();
+  // NetworkTableEntry leftF = Shuffleboard.getTab("Tuning").add("LS VF", 0).getEntry();
+  // NetworkTableEntry rightF = Shuffleboard.getTab("Tuning").add("RS VF", 0).getEntry();
+  // NetworkTableEntry leftI = Shuffleboard.getTab("Tuning").add("LS VI", 0).getEntry();
+  // NetworkTableEntry rightI = Shuffleboard.getTab("Tuning").add("RS VI", 0).getEntry();
   double targetRPM = 0;
-  double LP;
-  double RP;
+  // double LF;
+  // double RF;
+  double LP = 0.6;//0.35;
+  double RP = 0.5;//0.35;
+  // double LI = 0.0003;
+  // double RI = 0.0001;
   boolean tuningEnable = false;
 
   double speed;
@@ -50,28 +58,46 @@ public class Shooter extends SubsystemBase {
 
     targetRPM = shootRPM.getDouble(0);
     
-    if(Robot.tuningEnable.getBoolean(false)) {
-      tuningEnable = true;
+    // double lastLP = LP;
+    // LP = leftP.getDouble(0);
+    // if(lastLP != LP) {
+    //   shootMotorLeft.config_kP(Constants.kSlotIdx, LP, Constants.kTimeMS);
+    // }
 
-      double lastLP = LP;
-      LP = leftP.getDouble(0);
-      if(lastLP != LP) {
-        shootMotorLeft.config_kP(Constants.kSlotIdx, LP, Constants.kTimeMS);
-      }
+    // double lastRP = RP;
+    // RP = rightP.getDouble(0);
+    // if(lastRP != RP) {
+    //   shootMotorRight.config_kP(Constants.kSlotIdx, RP, Constants.kTimeMS);
+    // }
 
-      double lastRP = RP;
-      RP = rightP.getDouble(0);
-      if(lastRP != RP) {
-        shootMotorRight.config_kP(Constants.kSlotIdx, RP, Constants.kTimeMS);
-      }
-    } else if(!tuningEnable) {
-      LP = Constants.SHOOT_LEFT_VEL_P;
-      shootMotorLeft.config_kP(Constants.kSlotIdx, LP, Constants.kTimeMS);
+    // double lastLF = LF;
+    // LF = leftF.getDouble(0);
+    // if(lastLF != LF) {
+    //   shootMotorLeft.config_kF(Constants.kSlotIdx, LF, Constants.kTimeMS);
+    // }
 
-      RP = Constants.SHOOT_RIGHT_VEL_P;
-      shootMotorRight.config_kP(Constants.kSlotIdx, RP, Constants.kTimeMS);
-    }
+    // double lastRF = RF;
+    // RF = rightF.getDouble(0);
+    // if(lastRF != RF) {
+    //   shootMotorRight.config_kF(Constants.kSlotIdx, RF, Constants.kTimeMS);
+    // }
+
+    // double lastLI = LI;
+    // LI = leftI.getDouble(0);
+    // if(lastLI != LI) {
+    //   shootMotorLeft.config_kI(Constants.kSlotIdx, LI, Constants.kTimeMS);
+    // }
+
+    // double lastRI = RI;
+    // RI = rightI.getDouble(0);
+    // if(lastRI != RI) {
+    //   shootMotorRight.config_kI(Constants.kSlotIdx, RI, Constants.kTimeMS);
+    // }
     
+  }
+
+  public void zeroEncoder() {
+    angleEncoder.setPosition(0);
   }
 
   public void setShooterMotors(double speed) {
@@ -97,6 +123,10 @@ public class Shooter extends SubsystemBase {
     return shootMotorRight.getSelectedSensorVelocity() / Constants.RPM_TO_TP100MS;
   }
 
+  public double getTargetRPM() {
+    return targetRPM;
+  }
+
   public void setAngleMotor(double speed) {
     adjustAngleMotorLeft.set(speed + Constants.FEEDFORWARD);
     adjustAngleMotorRight.set(speed + Constants.FEEDFORWARD);
@@ -116,7 +146,7 @@ public class Shooter extends SubsystemBase {
         setAngleMotor(output);
       }
     } 
-    else if(angleEncoder.getPosition() > 29)
+    else if(angleEncoder.getPosition() > 46)
     {
       if(output > 0) 
       {
@@ -160,13 +190,13 @@ public class Shooter extends SubsystemBase {
     shootMotorRight.configPeakOutputReverse(-Constants.PEAK_SHOOTER);
 //------------------------------------------------------------------------------
     LP = Constants.SHOOT_LEFT_VEL_P;
-    shootMotorLeft.config_kF(Constants.kSlotIdx, 0, Constants.kTimeMS); //timeout maybe 30
+    shootMotorLeft.config_kF(Constants.kSlotIdx, Constants.SHOOT_FF_L, Constants.kTimeMS); //timeout maybe 30
     shootMotorLeft.config_kP(Constants.kSlotIdx, LP, Constants.kTimeMS);
     shootMotorLeft.config_kI(Constants.kSlotIdx, 0, Constants.kTimeMS);
     shootMotorLeft.config_kD(Constants.kSlotIdx, 0, Constants.kTimeMS);
 
     RP = Constants.SHOOT_RIGHT_VEL_P;
-    shootMotorRight.config_kF(Constants.kSlotIdx, 0, Constants.kTimeMS); //timeout maybe 30
+    shootMotorRight.config_kF(Constants.kSlotIdx, Constants.SHOOT_FF_R, Constants.kTimeMS); //timeout maybe 30
     shootMotorRight.config_kP(Constants.kSlotIdx, RP, Constants.kTimeMS);
     shootMotorRight.config_kI(Constants.kSlotIdx, 0, Constants.kTimeMS);
     shootMotorRight.config_kD(Constants.kSlotIdx, 0, Constants.kTimeMS);

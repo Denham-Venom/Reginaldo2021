@@ -28,11 +28,8 @@ public class VisionTurnPID extends PIDCommand {
         () -> 0, // 0 represents robot being centered on target, since feedback from the limelight is used
         output -> {
           int sign = (int) (output / Math.abs(output));
-          if(Robot.tuningEnable.getBoolean(false)) {
-            output = output + sign * Robot.steerF.getDouble(0);
-          } else {
-            output = output + sign * Constants.DT_TURN_F;//TODO-maybe minus, idk
-          }
+          //output = output + sign * Robot.steerF.getDouble(0);
+          output = output + sign * Constants.DT_TURN_F;//TODO-maybe minus, idk
           dt.setLeftMotors(-output);
           dt.setRightMotors(+output);
       }
@@ -54,15 +51,15 @@ public class VisionTurnPID extends PIDCommand {
   @Override
   public void execute() {
     super.execute();
-    if(Robot.tuningEnable.getBoolean(false)) { //TODO maybe check only for changes not current state
-      getController().setP(Robot.steerP.getDouble(0));
-      getController().setI(Robot.steerI.getDouble(0));
-      getController().setD(Robot.steerD.getDouble(0));
-    } else {
-      getController().setP(Constants.DT_TURN_P);
-      getController().setI(Constants.DT_TURN_I);
-      getController().setD(Constants.DT_TURN_D);
-    }
+    // if(Robot.tuningEnable.getBoolean(false)) { //TODO maybe check only for changes not current state
+    //  getController().setP(Robot.steerP.getDouble(0));
+    //   getController().setI(Robot.steerI.getDouble(0));
+    //  getController().setD(Robot.steerD.getDouble(0));
+    // } else {
+    //   getController().setP(Constants.DT_TURN_P);
+    //   getController().setI(Constants.DT_TURN_I);
+    //   getController().setD(Constants.DT_TURN_D);
+    // }
   }
 
   @Override

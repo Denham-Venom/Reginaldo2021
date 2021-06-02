@@ -72,7 +72,7 @@ public final class Constants
 	public static final double DT_PID_I = 0;
 	public static final double DT_PID_D = 0;
 	public static final double DT_PID_FT_P = 0.1;
-	public static final double DT_TURN_F = 0.12; //needs tuning
+	public static final double DT_TURN_F = 0.09; //needs tuning
 	public static final double DT_TURN_P = 0.005; //needs tuning
 	public static final double DT_TURN_I = 0;
 	public static final double DT_TURN_D = 0;
@@ -85,8 +85,7 @@ public final class Constants
 	public static final double ALLOWABLE_STEER_ERR = 1;
 	public static final double ALLOWABLE_AIM_ERR = .25;
 
-	public static final double SHOOTER_AIM_ANG_FF = 3.5;
-	public static final double FEEDFORWARD = 0.009;
+	public static final double FEEDFORWARD = 0.011;
 
 	public static final int kTimeoutMS = 30;
 	public static final int kPIDLoopIdx = 0;
@@ -106,17 +105,32 @@ public final class Constants
 
 	public static final double LL_ANG = 10;
 	public static final double CAM_ANG_TO_SHOOT_ANG = 1.18; //TODO
-	public static final double SHOOT_AIM_ANG_FF = 2;
+	public static final double SHOOT_AIM_ANG_FF = 7;
 	public static final double SHOOT_ADJ_VOLT_LIM = .2; 
-	public static final double SHOOTER_MOTOR_VELOCITY = 2500; //RPM...allegedly
 
 	public static final double PEAK_SHOOTER = 0.6;
 	public static final int kAUXLoopIdx = 1;
-	public static final double SHOOT_AIM_P = 0.00001;
+	public static final double SHOOT_AIM_P = 0.001;
 	public static final double SHOOT_AIM_I = 0;
 	public static final double SHOOT_AIM_D = 0;
-	public static final double SHOOT_AIM_F = 0.09;
+	public static final double SHOOT_AIM_F = 0.04;
 	public static final double INTAKE_DEFAULT_TIME = 3;
-	public static final double SHOOTER_DEFAULT_VEL = 2500;
+	public static final double SHOOTER_DEFAULT_VEL = 3000;
+	public static final double SHOOT_ALLOWABLE_VEL_ERR = 100;
+	public static final double SHOOT_FF_L = 0;
+	public static final double SHOOT_FF_R = 0;
+
+
+	public static final double SHOOTER_BLUEZONE_VEL = 2100;
+	public static final double SHOOTER_BLUEZONE_AIM_ANG_FF = -7.5; //degrees
+
+	public static final double SHOOTER_GREENZONE_AIM_ANG = 44;
+	public static final double SHOOTER_GREENZONE_VEL = 3000;
+
+	public static final double SHOOTER_REDZONE_AIM_ANG_FF = -9.5;
+	public static final double SHOOTER_REDZONE_VEL = 2250;
+
+	public static final double SHOOTER_YELLOWZONE_AIM_ANG_FF = -7;
+	public static final double SHOOTER_YELLOWZONE_VEL = 1950;
 
 }

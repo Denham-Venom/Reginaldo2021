@@ -64,55 +64,55 @@ public class DriveTrain extends SubsystemBase {
     lowGearTurn = lowerGearTurn.getDouble(0);
 
     m_feet = movementFeet.getDouble(0);
-    if(Robot.tuningEnable.getBoolean(false)) { //is tuning enabled
-      tuningEnable = true;
+    // if(Robot.tuningEnable.getBoolean(false)) { //is tuning enabled
+    //   tuningEnable = true;
 
-      double lastf = f;
-      f = Robot.moveF.getDouble(0);
-      if(lastf != f) {
-        motorTopLeft.config_kF(Constants.kPIDLoopIdx, f, Constants.kTimeoutMS);
-        motorTopRight.config_kF(Constants.kPIDLoopIdx, f, Constants.kTimeoutMS);
-      }
+    //   double lastf = f;
+    //   f = Robot.moveF.getDouble(0);
+    //   if(lastf != f) {
+    //     motorTopLeft.config_kF(Constants.kPIDLoopIdx, f, Constants.kTimeoutMS);
+    //     motorTopRight.config_kF(Constants.kPIDLoopIdx, f, Constants.kTimeoutMS);
+    //   }
 
-      double lastp = p;
-      p = Robot.moveP.getDouble(0);
-      if(lastp != p) {
-        motorTopLeft.config_kP(Constants.kPIDLoopIdx, p, Constants.kTimeoutMS);
-        motorTopRight.config_kP(Constants.kPIDLoopIdx, p, Constants.kTimeoutMS);
-      }
+    //   double lastp = p;
+    //   p = Robot.moveP.getDouble(0);
+    //   if(lastp != p) {
+    //     motorTopLeft.config_kP(Constants.kPIDLoopIdx, p, Constants.kTimeoutMS);
+    //     motorTopRight.config_kP(Constants.kPIDLoopIdx, p, Constants.kTimeoutMS);
+    //   }
 
-      double lasti = i;
-      i = Robot.moveI.getDouble(0);
-      if(lasti != i) {
-        motorTopLeft.config_kI(Constants.kPIDLoopIdx, i, Constants.kTimeoutMS);
-        motorTopRight.config_kI(Constants.kPIDLoopIdx, i, Constants.kTimeoutMS);
-      }
+    //   double lasti = i;
+    //   i = Robot.moveI.getDouble(0);
+    //   if(lasti != i) {
+    //     motorTopLeft.config_kI(Constants.kPIDLoopIdx, i, Constants.kTimeoutMS);
+    //     motorTopRight.config_kI(Constants.kPIDLoopIdx, i, Constants.kTimeoutMS);
+    //   }
 
-      double lastd = d;
-      d = Robot.moveD.getDouble(0);
-      if(lastd != d) {
-        motorTopLeft.config_kD(Constants.kPIDLoopIdx, d, Constants.kTimeoutMS);
-        motorTopRight.config_kD(Constants.kPIDLoopIdx, d, Constants.kTimeoutMS);
-      }
-    } else if(tuningEnable) { //was tuning just disabled
-      tuningEnable = false;
+    //   double lastd = d;
+    //   d = Robot.moveD.getDouble(0);
+    //   if(lastd != d) {
+    //     motorTopLeft.config_kD(Constants.kPIDLoopIdx, d, Constants.kTimeoutMS);
+    //     motorTopRight.config_kD(Constants.kPIDLoopIdx, d, Constants.kTimeoutMS);
+    //   }
+    // } else if(tuningEnable) { //was tuning just disabled
+    //   tuningEnable = false;
 
-      f = Constants.DT_PID_F;
-      motorTopLeft.config_kI(Constants.kPIDLoopIdx, f, Constants.kTimeoutMS);
-      motorTopRight.config_kI(Constants.kPIDLoopIdx, f, Constants.kTimeoutMS);
+    //   f = Constants.DT_PID_F;
+    //   motorTopLeft.config_kI(Constants.kPIDLoopIdx, f, Constants.kTimeoutMS);
+    //   motorTopRight.config_kI(Constants.kPIDLoopIdx, f, Constants.kTimeoutMS);
 
-      p = Constants.DT_PID_P;
-      motorTopLeft.config_kI(Constants.kPIDLoopIdx, p, Constants.kTimeoutMS);
-      motorTopRight.config_kI(Constants.kPIDLoopIdx, p, Constants.kTimeoutMS);
+    //   p = Constants.DT_PID_P;
+    //   motorTopLeft.config_kI(Constants.kPIDLoopIdx, p, Constants.kTimeoutMS);
+    //   motorTopRight.config_kI(Constants.kPIDLoopIdx, p, Constants.kTimeoutMS);
 
-      i = Constants.DT_PID_I;
-      motorTopLeft.config_kI(Constants.kPIDLoopIdx, i, Constants.kTimeoutMS);
-      motorTopRight.config_kI(Constants.kPIDLoopIdx, i, Constants.kTimeoutMS);
+    //   i = Constants.DT_PID_I;
+    //   motorTopLeft.config_kI(Constants.kPIDLoopIdx, i, Constants.kTimeoutMS);
+    //   motorTopRight.config_kI(Constants.kPIDLoopIdx, i, Constants.kTimeoutMS);
       
-      d = Constants.DT_PID_D;
-      motorTopLeft.config_kI(Constants.kPIDLoopIdx, d, Constants.kTimeoutMS);
-      motorTopRight.config_kI(Constants.kPIDLoopIdx, d, Constants.kTimeoutMS);
-    }
+    //   d = Constants.DT_PID_D;
+    //   motorTopLeft.config_kI(Constants.kPIDLoopIdx, d, Constants.kTimeoutMS);
+    //   motorTopRight.config_kI(Constants.kPIDLoopIdx, d, Constants.kTimeoutMS);
+    // }
     
   }
 

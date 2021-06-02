@@ -25,7 +25,7 @@ public class Move extends CommandBase {
 
   public Move(DriveTrain dt) {
     this.dt = dt;
-    feet = Robot.move.getDouble(0);
+    //feet = Robot.move.getDouble(0);
   }
 
   // Called when the command is initially scheduled.

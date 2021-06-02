@@ -33,19 +33,20 @@ public class Robot extends TimedRobot {
     tuningEnable.setBoolean(!cur);
   }));
 
-  public static final NetworkTableEntry moveP = tuning.add("M P", 0).getEntry();
-  public static final NetworkTableEntry moveI = tuning.add("M I", 0).getEntry();
-  public static final NetworkTableEntry moveD = tuning.add("M D", 0).getEntry();
-  public static final NetworkTableEntry moveF = tuning.add("M F", 0).getEntry();
-  public static final NetworkTableEntry steerP = tuning.add("S P", 0).getEntry();
-  public static final NetworkTableEntry steerI = tuning.add("S I", 0).getEntry();
-  public static final NetworkTableEntry steerD = tuning.add("S D", 0).getEntry();
-  public static final NetworkTableEntry steerF = tuning.add("S F", 0).getEntry();
-  public static final NetworkTableEntry aimP = tuning.add("A P", 0).getEntry();
-  public static final NetworkTableEntry aimI = tuning.add("A I", 0).getEntry();
-  public static final NetworkTableEntry aimD = tuning.add("A D", 0).getEntry();
-  public static final NetworkTableEntry aimF = tuning.add("A F", 0).getEntry();
-  public static final NetworkTableEntry move = tuning.add("move", 0).getEntry();
+  // public static final NetworkTableEntry moveP = tuning.add("M P", 0).getEntry();
+  // public static final NetworkTableEntry moveI = tuning.add("M I", 0).getEntry();
+  // public static final NetworkTableEntry moveD = tuning.add("M D", 0).getEntry();
+  // public static final NetworkTableEntry moveF = tuning.add("M F", 0).getEntry();
+  // public static final NetworkTableEntry steerP = tuning.add("S P", 0).getEntry();
+  // public static final NetworkTableEntry steerI = tuning.add("S I", 0).getEntry();
+  // public static final NetworkTableEntry steerD = tuning.add("S D", 0).getEntry();
+  // public static final NetworkTableEntry steerF = tuning.add("S F", 0).getEntry();
+  // public static final NetworkTableEntry aimP = tuning.add("A P", 0).getEntry();
+  // public static final NetworkTableEntry aimI = tuning.add("A I", 0).getEntry();
+  // public static final NetworkTableEntry aimD = tuning.add("A D", 0).getEntry();
+  // public static final NetworkTableEntry aimF = tuning.add("A F", 0).getEntry();
+  // public static final NetworkTableEntry move = tuning.add("move", 0).getEntry();
+  public static final NetworkTableEntry aimAngFF = tuning.add("AAFF", 0).getEntry();
 
   public static final NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
   public static final NetworkTableEntry lltx = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx");
@@ -112,6 +113,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    m_robotContainer.zeroShooterAngle();
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove

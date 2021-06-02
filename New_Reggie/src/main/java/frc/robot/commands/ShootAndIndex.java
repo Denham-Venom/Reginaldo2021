@@ -19,6 +19,8 @@ public class ShootAndIndex extends CommandBase {
   long startTime;
   double seconds = 5;
   long curTime;
+  boolean useParamVel = false;
+  double target;
 
   /** Creates a new ShootAndIndex. */
   public ShootAndIndex(Shooter shoot, Intake intake, double shooterSpeed, double indexSpeed, double spinUpSpeed) {
@@ -29,16 +31,30 @@ public class ShootAndIndex extends CommandBase {
     this.spinUpSpeed = spinUpSpeed;
     this.indexSpeed = indexSpeed;
     addRequirements(shoot);
+    useParamVel = true;
+    target = shooterSpeed;
   }
 
   public ShootAndIndex(Intake intake, Shooter shoot) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.intake = intake;
     this.shoot = shoot;
-    shooterSpeed = Constants.SHOOTER_MOTOR_VELOCITY;
+    shooterSpeed = Constants.SHOOTER_DEFAULT_VEL;
     spinUpSpeed = Constants.SPIN_UP_SPEED;
     indexSpeed = Constants.INDEXER_SPEED;
     addRequirements(shoot);
+  }
+
+  public ShootAndIndex(Intake intake, Shooter shoot, double RPM) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    this.intake = intake;
+    this.shoot = shoot;
+    shooterSpeed = RPM;
+    spinUpSpeed = Constants.SPIN_UP_SPEED;
+    indexSpeed = Constants.INDEXER_SPEED;
+    addRequirements(shoot);
+    useParamVel = true;
+    target = RPM;
   }
 
   public ShootAndIndex(Intake intake, Shooter shoot, double RPM, double spinUpSpeed, double indexSpeed, double seconds) {
@@ -50,12 +66,15 @@ public class ShootAndIndex extends CommandBase {
     this.spinUpSpeed = spinUpSpeed;
     this.indexSpeed = indexSpeed;
     addRequirements(shoot);
+    target = RPM;
+    useParamVel = true;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shoot.setShooterVelocity(shooterSpeed);
+    if(useParamVel) shoot.setShooterVelocity(shooterSpeed);
+    else shoot.setShooterVelocity();
     startTime = System.currentTimeMillis();
   }
 
@@ -63,7 +82,15 @@ public class ShootAndIndex extends CommandBase {
   @Override
   public void execute() {
     curTime = System.currentTimeMillis();
-    if(curTime - startTime > 1000) {
+    /*double ls = shoot.getLeftShooterRPM();
+    double rs = shoot.getRightShooterRPM();
+    if(useParamVel) target = shoot.getTargetRPM();
+    if(Math.abs(ls - target) > Constants.SHOOT_ALLOWABLE_VEL_ERR 
+        || Math.abs(rs - target) > Constants.SHOOT_ALLOWABLE_VEL_ERR 
+        || Math.abs(ls - rs) > Constants.SHOOT_ALLOWABLE_VEL_ERR) {
+      intake.setIndexerMotor(0);
+      intake.setSpinUpMotor(0);
+    } else*/ if(curTime - startTime > 1500) {
       intake.setIndexerMotor(indexSpeed);
       intake.setSpinUpMotor(spinUpSpeed);
     }
