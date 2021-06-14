@@ -6,26 +6,24 @@ package frc.robot.commands.auto;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants;
 import frc.robot.commands.Move;
-import frc.robot.commands.ShootAndIndex;
-import frc.robot.commands.VisionTurnThenAim;
-import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.DriveTrain;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class MoveShoot extends SequentialCommandGroup {
-  /** Creates a new MoveShoot. */
-  public MoveShoot(DriveTrain dt, Shooter s, Intake i, double RPM, double spinUpSpeed, double indexSpeed, double shootTime) {
+public class MoveAndIntake extends SequentialCommandGroup {
+  /** Creates a new MoveAndIntake. */
+  public MoveAndIntake(DriveTrain dt, Intake intake) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new InstantCommand(() -> i.extendIntake()),
-      new Move(dt, 2),
-      new VisionTurnThenAim(dt, s),
-      new ShootAndIndex(i, s, RPM, spinUpSpeed, indexSpeed, shootTime)
+      new InstantCommand(() -> intake.extendIntake()),
+      //new InstantCommand(()-> intake.setIntakeMotor(Constants.INTAKE_BALL_SPEED)),
+      new Move(dt, 5.0)
+
     );
   }
 }

@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
-  private final CANSparkMax intakeMotor = new CANSparkMax(Constants.INTAKE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
+  private final CANSparkMax intakeMotor = new CANSparkMax(Constants.INTAKE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushed); //TODO-change back to brushless
   public final DoubleSolenoid intakeDoubleSolenoid = new DoubleSolenoid(0, 1);
   private final VictorSPX indexerMotor1 = new VictorSPX(Constants.INDEXER_MOTOR_1);
   private final VictorSPX indexerMotor2 = new VictorSPX(Constants.INDEXER_MOTOR_2);
