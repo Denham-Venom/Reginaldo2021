@@ -132,18 +132,27 @@ public class RobotContainer {
     //rbButton2.whileHeld(new StartEndCommand(() -> intake.setIndexerMotor(Constants.INDEXER_SPEED), () -> intake.setIndexerMotor(0)));
     //ltButton2.whileHeld(new StartEndCommand(() -> intake.setIntakeMotor(-Constants.INTAKE_BALL_SPEED), () -> intake.setIntakeMotor(0)));
     //rtButton2.whileHeld(new StartEndCommand(() -> intake.setIntakeMotor(Constants.INTAKE_BALL_SPEED), () -> intake.setIntakeMotor(0)));
-
+*/
 
     //----------Test Controls----------//
-    lbButton.whenHeld(new VisionTurnThenAim(drivetrain, shooter)); //vision
-    rbButton.whenHeld(new ShootAndIndex(intake, shooter));
+    //lbButton.whenHeld(new VisionTurnThenAim(drivetrain, shooter)); //vision
+    //rbButton.whenHeld(new ShootAndIndex(intake, shooter));
     // rbButton.whileHeld(new StartEndCommand(() -> shooter.setShooterVelocity(), 
     //                                        () -> shooter.setShooterMotors(0))); //sets shooter velocity with shuffleboard rpm
     //aButton2.whenHeld(new StartEndCommand(() -> shooter.setAngleMotor(.1), () -> shooter.setAngleMotor(0) ));
     //bButton2.whenHeld(new StartEndCommand(() -> shooter.setAngleMotor(-.1), () -> shooter.setAngleMotor(0) ));
-*/
+
+    //Indexer - A & B
+    aButton2.whenHeld(new StartEndCommand(() -> intake.setIndexerMotor(Constants.INDEXER_SPEED), () -> intake.setIndexerMotor(0)));
+    bButton2.whenHeld(new StartEndCommand(() -> intake.setIndexerMotor(-Constants.INDEXER_SPEED), () -> intake.setIndexerMotor(0)));
+
+    //Shooter - LB & RB
     lbButton2.whenHeld(new StartEndCommand(() -> shooter.setShooterMotors(Constants.SHOOTER_MOTOR_SPEED), () -> shooter.setShooterMotors(0)));
     rbButton2.whenHeld(new StartEndCommand(() -> shooter.setShooterMotors(-Constants.SHOOTER_MOTOR_SPEED), () -> shooter.setShooterMotors(0)));
+
+    //Intake - LT & RT
+    ltButton2.whenHeld(new StartEndCommand(() -> intake.setIntakeMotor(Constants.INTAKE_BALL_SPEED), () -> intake.setIntakeMotor(0)));
+    rtButton2.whenHeld(new StartEndCommand(() -> intake.setIntakeMotor(-Constants.INTAKE_BALL_SPEED), () -> intake.setIntakeMotor(0)));
   }
 
   private void setDefaultCommands() {
