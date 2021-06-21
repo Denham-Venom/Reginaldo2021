@@ -146,6 +146,10 @@ public class RobotContainer {
     aButton2.whenHeld(new StartEndCommand(() -> intake.setIndexerMotor(Constants.INDEXER_SPEED), () -> intake.setIndexerMotor(0)));
     bButton2.whenHeld(new StartEndCommand(() -> intake.setIndexerMotor(-Constants.INDEXER_SPEED), () -> intake.setIndexerMotor(0)));
 
+    //Spinup X & Y
+    xButton2.whenHeld(new StartEndCommand(() -> intake.setSpinUpMotor(Constants.SPIN_UP_SPEED), () -> intake.setSpinUpMotor(0)));
+    yButton2.whenHeld(new StartEndCommand(() -> intake.setSpinUpMotor(-Constants.SPIN_UP_SPEED), () -> intake.setSpinUpMotor(0)));
+
     //Shooter - LB & RB
     lbButton2.whenHeld(new StartEndCommand(() -> shooter.setShooterMotors(Constants.SHOOTER_MOTOR_SPEED), () -> shooter.setShooterMotors(0)));
     rbButton2.whenHeld(new StartEndCommand(() -> shooter.setShooterMotors(-Constants.SHOOTER_MOTOR_SPEED), () -> shooter.setShooterMotors(0)));
