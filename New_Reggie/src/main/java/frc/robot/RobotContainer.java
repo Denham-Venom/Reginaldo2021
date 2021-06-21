@@ -142,6 +142,8 @@ public class RobotContainer {
     //aButton2.whenHeld(new StartEndCommand(() -> shooter.setAngleMotor(.1), () -> shooter.setAngleMotor(0) ));
     //bButton2.whenHeld(new StartEndCommand(() -> shooter.setAngleMotor(-.1), () -> shooter.setAngleMotor(0) ));
 */
+    lbButton2.whenHeld(new StartEndCommand(() -> shooter.setShooterMotors(Constants.SHOOTER_MOTOR_SPEED), () -> shooter.setShooterMotors(0)));
+    rbButton2.whenHeld(new StartEndCommand(() -> shooter.setShooterMotors(-Constants.SHOOTER_MOTOR_SPEED), () -> shooter.setShooterMotors(0)));
   }
 
   private void setDefaultCommands() {
