@@ -109,6 +109,9 @@ public class RobotContainer {
     xButton.whenPressed(new InstantCommand(intake::toggleIntake));
     yButton.whenHeld(new AimAndShoot(drivetrain, shooter, intake));
 
+    lbButton.whenHeld(new StartEndCommand(() -> shooter.setAngleMotorsSafe(.1), () -> shooter.setAngleMotor(0)));
+    rbButton.whenHeld(new StartEndCommand(() -> shooter.setAngleMotorsSafe(-.1), () -> shooter.setAngleMotor(0)));
+
     ltButton.toggleWhenPressed(new StartEndCommand(() ->  NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setDouble(0), () -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setDouble(1)));
     rtButton.whenHeld(new StartEndCommand(() -> intake.setIntakeMotor(Constants.INTAKE_BALL_SPEED), () -> intake.setIntakeMotor(0)));
 /*
@@ -122,16 +125,8 @@ public class RobotContainer {
     xButton2.whenHeld(new AimAndShootBlueZone(drivetrain, shooter, intake));
     // Y - Yellow Zone
     yButton2.whenHeld(new AimAndShootYellowZone(drivetrain, shooter, intake));
-    lbButton2.whenHeld(new StartEndCommand(() -> shooter.setAngleMotor(.1), () -> shooter.setAngleMotor(0)));
-    rbButton2.whenHeld(new StartEndCommand(() -> shooter.setAngleMotor(-.1), () -> shooter.setAngleMotor(0)));
-    //aButton2.whileHeld(new StartEndCommand(() -> intake.setSpinUpMotor(-Constants.SPIN_UP_SPEED), () -> intake.setSpinUpMotor(0)));
-    //bButton2.whileHeld(new StartEndCommand(() -> intake.setSpinUpMotor(Constants.SPIN_UP_SPEED), () -> intake.setSpinUpMotor(0)));
     //xButton2.whenHeld(new ShootAndIndex(intake, shooter));
     //yButton2.whenHeld(new AimAndShoot(drivetrain, shooter, intake));
-    //lbButton2.whileHeld(new StartEndCommand(() -> intake.setIndexerMotor(-Constants.INDEXER_SPEED), () -> intake.setIndexerMotor(0)));
-    //rbButton2.whileHeld(new StartEndCommand(() -> intake.setIndexerMotor(Constants.INDEXER_SPEED), () -> intake.setIndexerMotor(0)));
-    //ltButton2.whileHeld(new StartEndCommand(() -> intake.setIntakeMotor(-Constants.INTAKE_BALL_SPEED), () -> intake.setIntakeMotor(0)));
-    //rtButton2.whileHeld(new StartEndCommand(() -> intake.setIntakeMotor(Constants.INTAKE_BALL_SPEED), () -> intake.setIntakeMotor(0)));
 */
 
     //----------Test Controls----------//
@@ -139,8 +134,6 @@ public class RobotContainer {
     //rbButton.whenHeld(new ShootAndIndex(intake, shooter));
     // rbButton.whileHeld(new StartEndCommand(() -> shooter.setShooterVelocity(), 
     //                                        () -> shooter.setShooterMotors(0))); //sets shooter velocity with shuffleboard rpm
-    //aButton2.whenHeld(new StartEndCommand(() -> shooter.setAngleMotor(.1), () -> shooter.setAngleMotor(0) ));
-    //bButton2.whenHeld(new StartEndCommand(() -> shooter.setAngleMotor(-.1), () -> shooter.setAngleMotor(0) ));
 
     //Indexer - A & B
     aButton2.whenHeld(new StartEndCommand(() -> intake.setIndexerMotor(Constants.INDEXER_SPEED), () -> intake.setIndexerMotor(0)));
