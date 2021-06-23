@@ -53,28 +53,28 @@ public class RobotContainer {
   // Joystick 1
   private final Joystick copilotDriverController = new Joystick(1);
 
-  // A - Spinup Out
+  // A - Angle Motor Up
   private final JoystickButton aButton2 = new JoystickButton(copilotDriverController, Constants.ABUTTON);
 
-  // B - Spinup In
+  // B - Angle Motor Down
   private final JoystickButton bButton2 = new JoystickButton(copilotDriverController, Constants.BBUTTON);
 
-  // X - Shoot and Index
+  // X - Spinup Wheel
   private final JoystickButton xButton2 = new JoystickButton(copilotDriverController, Constants.XBUTTON);
 
-  // Y - Aim and Shoot
+  // Y - Indexer
   private final JoystickButton yButton2 = new JoystickButton(copilotDriverController, Constants.YBUTTON);
 
-  // LB - Index Out
+  // LB - Shooter
   private final JoystickButton lbButton2 = new JoystickButton(copilotDriverController, Constants.LBBUTTON);
 
-  // RB - Index In
+  // RB - Intake
   private final JoystickButton rbButton2 = new JoystickButton(copilotDriverController, Constants.RBBUTTON);
 
-  // LT - Intake Out
+  // LT - 
   private final JoystickButton ltButton2 = new JoystickButton(copilotDriverController, Constants.ltBUTTON);
 
-  // RT - Intake In
+  // RT - 
   private final JoystickButton rtButton2 = new JoystickButton(copilotDriverController, Constants.rtBUTTON);
 
 
@@ -104,44 +104,47 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     //----------Joystick 0 Controls----------//
-    aButton.whenPressed(new InstantCommand(drivetrain::invertDrive, drivetrain));
+    // Invert Drive <3
+    aButton.whenPressed(new InstantCommand(drivetrain::invertDrive, drivetrain)); 
+
+    // Switch Gear
     bButton.whenPressed(new InstantCommand(drivetrain::hLGearSwitch, drivetrain));
+
+    // Toggle Intake
     xButton.whenPressed(new InstantCommand(intake::toggleIntake));
+
+    // Aim and Shoot
     yButton.whenHeld(new AimAndShoot(drivetrain, shooter, intake));
 
+    // Turn On/Off Limelight
     ltButton.toggleWhenPressed(new StartEndCommand(() ->  NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setDouble(0), () -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setDouble(1)));
+
+    // Intake Motor
     rtButton.whenHeld(new StartEndCommand(() -> intake.setIntakeMotor(Constants.INTAKE_BALL_SPEED), () -> intake.setIntakeMotor(0)));
-/*
+
+    //sets shooter velocity with shuffleboard rpm
+    rbButton.whileHeld(new StartEndCommand(() -> shooter.setShooterVelocity(), 
+                                            () -> shooter.setShooterMotors(0))); 
 
     //----------Joystick 1 Controls----------//
-    // A - Green Zone
-    aButton2.whenHeld(new AimAndShootGreenZone(drivetrain, shooter, intake));
-    // B - Red Zone
-    bButton2.whenHeld(new AimAndShootRedZone(drivetrain, shooter, intake));
-    // X - Blue Zone
-    xButton2.whenHeld(new AimAndShootBlueZone(drivetrain, shooter, intake));
-    // Y - Yellow Zone
-    yButton2.whenHeld(new AimAndShootYellowZone(drivetrain, shooter, intake));
-    lbButton2.whenHeld(new StartEndCommand(() -> shooter.setAngleMotor(.1), () -> shooter.setAngleMotor(0)));
-    rbButton2.whenHeld(new StartEndCommand(() -> shooter.setAngleMotor(-.1), () -> shooter.setAngleMotor(0)));
-    //aButton2.whileHeld(new StartEndCommand(() -> intake.setSpinUpMotor(-Constants.SPIN_UP_SPEED), () -> intake.setSpinUpMotor(0)));
-    //bButton2.whileHeld(new StartEndCommand(() -> intake.setSpinUpMotor(Constants.SPIN_UP_SPEED), () -> intake.setSpinUpMotor(0)));
-    //xButton2.whenHeld(new ShootAndIndex(intake, shooter));
-    //yButton2.whenHeld(new AimAndShoot(drivetrain, shooter, intake));
-    //lbButton2.whileHeld(new StartEndCommand(() -> intake.setIndexerMotor(-Constants.INDEXER_SPEED), () -> intake.setIndexerMotor(0)));
-    //rbButton2.whileHeld(new StartEndCommand(() -> intake.setIndexerMotor(Constants.INDEXER_SPEED), () -> intake.setIndexerMotor(0)));
-    //ltButton2.whileHeld(new StartEndCommand(() -> intake.setIntakeMotor(-Constants.INTAKE_BALL_SPEED), () -> intake.setIntakeMotor(0)));
-    //rtButton2.whileHeld(new StartEndCommand(() -> intake.setIntakeMotor(Constants.INTAKE_BALL_SPEED), () -> intake.setIntakeMotor(0)));
+    
+    // Angle Motor Up
+    aButton2.whenHeld(new StartEndCommand(() -> shooter.setAngleMotorsSafe(Constants.ANGLE_MOTOR_SPEED), () -> shooter.setAngleMotor(0) )); 
 
+    // Angle Motor Down
+    bButton2.whenHeld(new StartEndCommand(() -> shooter.setAngleMotorsSafe(-Constants.ANGLE_MOTOR_SPEED), () -> shooter.setAngleMotor(0) )); 
 
-    //----------Test Controls----------//
-    lbButton.whenHeld(new VisionTurnThenAim(drivetrain, shooter)); //vision
-    rbButton.whenHeld(new ShootAndIndex(intake, shooter));
-    // rbButton.whileHeld(new StartEndCommand(() -> shooter.setShooterVelocity(), 
-    //                                        () -> shooter.setShooterMotors(0))); //sets shooter velocity with shuffleboard rpm
-    //aButton2.whenHeld(new StartEndCommand(() -> shooter.setAngleMotor(.1), () -> shooter.setAngleMotor(0) ));
-    //bButton2.whenHeld(new StartEndCommand(() -> shooter.setAngleMotor(-.1), () -> shooter.setAngleMotor(0) ));
-*/
+    // Spinup Wheel
+    xButton2.whenHeld(new StartEndCommand(() -> intake.setSpinUpMotor(Constants.SPIN_UP_SPEED), () -> intake.setSpinUpMotor(0) )); 
+
+    // Indexer
+    yButton2.whenHeld(new StartEndCommand(() -> intake.setIndexerMotor(Constants.INDEXER_SPEED), () -> intake.setIndexerMotor(0) )); 
+
+    // Shooter
+    rbButton2.whenHeld(new StartEndCommand(() -> shooter.setShooterMotors(Constants.SHOOTER_MOTOR_SPEED), () -> shooter.setShooterMotors(0) )); 
+
+    // Intake
+    lbButton2.whenHeld(new StartEndCommand(() -> intake.setIntakeMotor(Constants.INTAKE_BALL_SPEED), () -> intake.setIntakeMotor(0) )); 
   }
 
   private void setDefaultCommands() {
