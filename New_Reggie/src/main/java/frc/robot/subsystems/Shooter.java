@@ -64,6 +64,17 @@ public class Shooter extends SubsystemBase {
     if(bottomlimitSwitch.get()) {
       angleEncoder.setPosition(0);
     }
+
+    double oldLP = LP;
+    double oldRP = RP;
+    LP = Robot.leftPID.getDouble(0);
+    RP = Robot.rightPID.getDouble(0);
+    if(oldLP != LP) {
+      shootMotorLeft.config_kP(Constants.kSlotIdx, LP, Constants.kTimeMS);
+    }
+    if(oldRP != RP) {
+      shootMotorRight.config_kP(Constants.kSlotIdx, RP, Constants.kTimeMS);      
+    }
     
     // double lastLP = LP;
     // LP = leftP.getDouble(0);

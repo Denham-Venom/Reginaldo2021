@@ -53,6 +53,8 @@ public class Robot extends TimedRobot {
   public static final NetworkTableEntry llty = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty");
   public static final NetworkTableEntry lltv = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv");
   public static final NetworkTableEntry ledMode = limelight.getEntry("ledMode");
+  public static final NetworkTableEntry leftPID = tuning.add("S L P", 0).getEntry();
+  public static final NetworkTableEntry rightPID = tuning.add("S R P", 0).getEntry();
 
   private Command m_autonomousCommand;
 
