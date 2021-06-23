@@ -12,6 +12,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -42,6 +43,8 @@ public class Shooter extends SubsystemBase {
   private final CANSparkMax adjustAngleMotorLeft = new CANSparkMax(Constants.ADJUST_ANGLE_MOTOR_LEFT, CANSparkMaxLowLevel.MotorType.kBrushless);
   private final CANSparkMax adjustAngleMotorRight = new CANSparkMax(Constants.ADJUST_ANGLE_MOTOR_RIGHT, CANSparkMaxLowLevel.MotorType.kBrushless);
   public final CANEncoder angleEncoder = adjustAngleMotorLeft.getEncoder();
+  private final DigitalInput toplimitSwitch = new DigitalInput(0);
+  private final DigitalInput bottomlimitSwitch = new DigitalInput(1);
 //---------------------------------------------------------------
 
   /** Creates a new Shooter. */
@@ -57,6 +60,10 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("R Shoot RPM", getRightShooterRPM());
 
     targetRPM = shootRPM.getDouble(0);
+
+    if(bottomlimitSwitch.get()) {
+      angleEncoder.setPosition(0);
+    }
     
     // double lastLP = LP;
     // LP = leftP.getDouble(0);
@@ -134,7 +141,7 @@ public class Shooter extends SubsystemBase {
 
   public void setAngleMotorsSafe(double output) {
     if(output > Constants.SHOOT_ADJ_VOLT_LIM) output = Constants.SHOOT_ADJ_VOLT_LIM;
-    if(angleEncoder.getPosition() < 1)
+    if(angleEncoder.getPosition() < 1 || bottomlimitSwitch.get())
     {
       if(output < 0) 
       {
@@ -146,7 +153,7 @@ public class Shooter extends SubsystemBase {
         setAngleMotor(output);
       }
     } 
-    else if(angleEncoder.getPosition() > 46)
+    else if(angleEncoder.getPosition() > 46 || toplimitSwitch.get())
     {
       if(output > 0) 
       {
