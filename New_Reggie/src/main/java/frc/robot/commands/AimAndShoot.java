@@ -18,8 +18,8 @@ public class AimAndShoot extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new VisionTurnThenAim(drivetrain, shooter),
-      new ShootAndIndex(intake, shooter)
+      new VisionTurnThenAim(drivetrain, shooter), //aims
+      new ShootAndIndex(intake, shooter) //shoots
     );
   }
 }

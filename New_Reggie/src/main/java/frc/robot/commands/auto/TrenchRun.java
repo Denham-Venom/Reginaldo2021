@@ -26,16 +26,21 @@ public class TrenchRun extends SequentialCommandGroup {
     addCommands(
       new InstantCommand(() -> intake.extendIntake()),
       new AimAndShoot(dt, shooter, intake),
-      new TurnToAngle(dt, 0.0),
-      //new MoveAndPickUp(dt, intake),
-      new TurnToAngle(dt, -90.0),
-      new Move(dt, 2.0)
-
-
-      //move
-      //aimandshoot
-      //turn
-      //moveandpickup
+      new TurnToAngle(dt, -90.0), 
+      new Move(dt, -2.5),  //hopefully goes backwards 2.5 feet
+      new TurnToAngle(dt, 90.0),
+      new MoveAndIntake(dt, intake, -18.0), 
+      new Move(dt, 18.0),
+      new AimAndShoot(dt, shooter, intake)
+      
+      //if starting right in front of goal
+      // aim and shoot //
+      // turn 90 counter-clockwise //
+      // go backwards 2 or 3 feet //
+      // turn clockwise 90 //
+      // go backwards while running intake 18 feet //
+      // go forward 18 feet //
+      // aim and shoot //
     );
   }
 }
