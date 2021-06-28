@@ -33,7 +33,7 @@ public class TrenchRun extends SequentialCommandGroup {
       new Move(dt, 18.0),
       new AimAndShoot(dt, shooter, intake)
       
-      //if starting right in front of goal
+      //if starting right in front of goal******
       // aim and shoot //
       // turn 90 counter-clockwise //
       // go backwards 2 or 3 feet //
