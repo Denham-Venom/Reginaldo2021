@@ -29,8 +29,12 @@ public class VisionAimPID extends PIDCommand {
         // This should return the setpoint (can also be a constant)
         () -> (Robot.lltv.getDouble(0) == 1) ? Math.toDegrees(Math.atan( (85.5/12.)/getDistanceToTarget() )) - Robot.aimAngFF.getDouble(0)/*Constants.SHOOT_AIM_ANG_FF*/ : 0, //0 is when shooter is bottomed out, tv = 1 means target found
         output -> {
+          // + or -
           int sign = (int) (output / Math.abs(output));
+
+          // adds or subtracts the ff value depending on sign
           output = output + sign * Constants.SHOOT_AIM_F;
+
           shooter.setAngleMotorsSafe(output);
         });
     s = shooter;
@@ -101,7 +105,7 @@ public class VisionAimPID extends PIDCommand {
     final double h1 = 1.75; //feet = 21 inches
     final double h2 = 91/12; //feet = 91 in
     final double a1 = 10; //degrees
-    double a2 = Robot.llty.getDouble(0);
+    double a2 = Robot.llty.getDouble(0); //Robot.llty is networktableentry where limelight publishes y angle values
     double d = (h2-h1) / Math.tan(Math.toRadians(a1+a2));
     SmartDashboard.putNumber("distance", d);
     return d; //d = (h2-h1) / tan(a1+a2);

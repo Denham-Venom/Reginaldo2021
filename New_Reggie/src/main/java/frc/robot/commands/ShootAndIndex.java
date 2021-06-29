@@ -74,7 +74,8 @@ public class ShootAndIndex extends CommandBase {
   @Override
   public void initialize() {
     if(useParamVel) shoot.setShooterVelocity(shooterSpeed);
-    else shoot.setShooterVelocity();
+    // else shoot.setShooterVelocity();
+    else shoot.setShooterMotors(shoot.shootRPM.getDouble(0));
     startTime = System.currentTimeMillis();
   }
 

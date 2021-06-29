@@ -135,13 +135,16 @@ public class RobotContainer {
     bButton2.whenHeld(new StartEndCommand(() -> shooter.setAngleMotorsSafe(-Constants.ANGLE_MOTOR_SPEED), () -> shooter.setAngleMotor(0) )); 
 
     // Spinup Wheel
-    xButton2.whenHeld(new StartEndCommand(() -> intake.setSpinUpMotor(Constants.SPIN_UP_SPEED), () -> intake.setSpinUpMotor(0) )); 
+    xButton2.whenHeld(new StartEndCommand(() -> shooter.setShooterVelocity(), () -> shooter.setShooterMotors(0) ));
 
     // Indexer
     yButton2.whenHeld(new StartEndCommand(() -> intake.setIndexerMotor(Constants.INDEXER_SPEED), () -> intake.setIndexerMotor(0) )); 
 
     // Shooter
-    rbButton2.whenHeld(new StartEndCommand(() -> shooter.setShooterMotors(Constants.SHOOTER_MOTOR_SPEED), () -> shooter.setShooterMotors(0) )); 
+    rbButton2.whenHeld(new StartEndCommand(() -> shooter.setShooterMotors(Constants.SHOOTER_MOTOR_SPEED), () -> shooter.setShooterMotors(0) ));
+    
+    // Spin Up Wheel
+    rtButton2.whenHeld(new StartEndCommand(() -> intake.setSpinUpMotor(Constants.SPIN_UP_SPEED), () -> intake.setSpinUpMotor(0)));
 
     // Intake
     lbButton2.whenHeld(new StartEndCommand(() -> intake.setIntakeMotor(Constants.INTAKE_BALL_SPEED), () -> intake.setIntakeMotor(0) )); 

@@ -27,7 +27,7 @@ public class IntakeBall extends CommandBase {
     this.intake = intake;
     this.speed = speed;
     this.time = time;
-    //addRequirements(intake);
+    addRequirements(intake);
   }
 
   /**
@@ -38,7 +38,7 @@ public class IntakeBall extends CommandBase {
     this.intake = intake;
     this.speed = Constants.INTAKE_BALL_SPEED;
     this.time = Constants.INTAKE_DEFAULT_TIME;
-    //addRequirements(intake);
+    addRequirements(intake);
   }
 
   // Called when the command is initially scheduled.

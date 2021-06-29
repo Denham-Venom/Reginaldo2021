@@ -21,7 +21,7 @@ import frc.robot.Robot;
 
 public class Shooter extends SubsystemBase {
 
-  NetworkTableEntry shootRPM = Shuffleboard.getTab("Tuning").add("RPM", 0).getEntry();
+  public NetworkTableEntry shootRPM = Shuffleboard.getTab("Tuning").add("RPM", 0).getEntry();
   // NetworkTableEntry leftP = Shuffleboard.getTab("Tuning").add("LS VP", 0).getEntry();
   // NetworkTableEntry rightP = Shuffleboard.getTab("Tuning").add("RS VP", 0).getEntry();
   // NetworkTableEntry leftF = Shuffleboard.getTab("Tuning").add("LS VF", 0).getEntry();
@@ -43,8 +43,8 @@ public class Shooter extends SubsystemBase {
   private final CANSparkMax adjustAngleMotorLeft = new CANSparkMax(Constants.ADJUST_ANGLE_MOTOR_LEFT, CANSparkMaxLowLevel.MotorType.kBrushless);
   private final CANSparkMax adjustAngleMotorRight = new CANSparkMax(Constants.ADJUST_ANGLE_MOTOR_RIGHT, CANSparkMaxLowLevel.MotorType.kBrushless);
   public final CANEncoder angleEncoder = adjustAngleMotorLeft.getEncoder();
-  private final DigitalInput toplimitSwitch = new DigitalInput(0);
-  private final DigitalInput bottomlimitSwitch = new DigitalInput(1);
+  // private final DigitalInput toplimitSwitch = new DigitalInput(0);
+  // private final DigitalInput bottomlimitSwitch = new DigitalInput(1);
 //---------------------------------------------------------------
 
   /** Creates a new Shooter. */
@@ -61,9 +61,10 @@ public class Shooter extends SubsystemBase {
 
     targetRPM = shootRPM.getDouble(0);
 
-    if(bottomlimitSwitch.get()) {
-      angleEncoder.setPosition(0);
-    }
+    // Checks if bottom limit switch is depressed and resets shooter angle to 0 if so
+    // if(bottomlimitSwitch.get()) {
+    //   zeroEncoder();
+    // }
 
     double oldLP = LP;
     double oldRP = RP;
@@ -152,7 +153,7 @@ public class Shooter extends SubsystemBase {
 
   public void setAngleMotorsSafe(double output) {
     if(output > Constants.SHOOT_ADJ_VOLT_LIM) output = Constants.SHOOT_ADJ_VOLT_LIM;
-    if(angleEncoder.getPosition() < 1 || bottomlimitSwitch.get())
+    if(angleEncoder.getPosition() < 1 )//|| bottomlimitSwitch.get())
     {
       if(output < 0) 
       {
@@ -164,7 +165,7 @@ public class Shooter extends SubsystemBase {
         setAngleMotor(output);
       }
     } 
-    else if(angleEncoder.getPosition() > 46 || toplimitSwitch.get())
+    else if(angleEncoder.getPosition() > 46 )//|| toplimitSwitch.get())
     {
       if(output > 0) 
       {
@@ -225,6 +226,7 @@ public class Shooter extends SubsystemBase {
 
     adjustAngleMotorLeft.restoreFactoryDefaults();
     adjustAngleMotorLeft.setInverted(true);
+
 
     adjustAngleMotorRight.restoreFactoryDefaults();
     adjustAngleMotorRight.setInverted(false);
