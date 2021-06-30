@@ -15,7 +15,20 @@ public class RendezvousRun extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      
+      new InstantCommand(() -> intake.extendIntake()), // extends intake
+      new AimAndShoot(dt, shooter, intake), // aims and shoots
+      new TurnToAngle(dt, 90), // turn 90 degrees right
+      new MoveAndIntake(dt, intake, -18), // moves 18 feet while running intake
+      new TurnToAngle(dt, 45), // turns 45 degrees
+      new Move(dt, 18), // moves 18 feet
+      new AimAndShoot(dt, shooter, intake) // aims and shoots
+    
+      //Aim and shoot *
+      //Rotate 90 degrees (counter- clockwise) *
+      //Move backwards (approx. -18 feet) *
+      //Rotate 45 degrees (clockwise) *
+      //Move backwards (approx. 18 feet) *
+      //Aim and shoot *
     );
   }
 }
