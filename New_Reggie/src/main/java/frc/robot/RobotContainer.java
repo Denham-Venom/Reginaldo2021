@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 import frc.robot.commands.auto.AutoScore;
+import frc.robot.commands.auto.RendezvousRun;
+import frc.robot.commands.auto.TrenchRun;
 /**
  * This class is where the bulk of the robot should be declared. Since
  * Command-based is a "declarative" paradigm, very little robot logic should
@@ -107,13 +109,15 @@ public class RobotContainer {
     aButton.whenPressed(new InstantCommand(drivetrain::invertDrive, drivetrain));
     bButton.whenPressed(new InstantCommand(drivetrain::hLGearSwitch, drivetrain));
     xButton.whenPressed(new InstantCommand(intake::toggleIntake));
-    yButton.whenHeld(new AimAndShoot(drivetrain, shooter, intake));
+    yButton.whenHeld(new TrenchRun(drivetrain, intake, shooter));
+    //yButton.whenHeld(new AimAndShoot(drivetrain, shooter, intake));
 
     lbButton.whenHeld(new StartEndCommand(() -> shooter.setAngleMotorsSafe(.1), () -> shooter.setAngleMotor(0)));
     rbButton.whenHeld(new StartEndCommand(() -> shooter.setAngleMotorsSafe(-.1), () -> shooter.setAngleMotor(0)));
 
     ltButton.toggleWhenPressed(new StartEndCommand(() ->  NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setDouble(0), () -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setDouble(1)));
-    rtButton.whenHeld(new StartEndCommand(() -> intake.setIntakeMotor(Constants.INTAKE_BALL_SPEED), () -> intake.setIntakeMotor(0)));
+    rtButton.whenHeld(new RendezvousRun(drivetrain, intake, shooter));
+    //rtButton.whenHeld(new StartEndCommand(() -> intake.setIntakeMotor(Constants.INTAKE_BALL_SPEED), () -> intake.setIntakeMotor(0)));
 /*
 
     //----------Joystick 1 Controls----------//
