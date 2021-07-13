@@ -139,13 +139,13 @@ public class DriveTrain extends SubsystemBase {
     motorBottomRight.setInverted(true);
     // -------------------------------------
 
-    // ----------------❤--------------------
+    // ------------------------------------
     // Acceleration Ramping :)
     motorTopLeft.configOpenloopRamp(0.25);
     motorTopLeft.configClosedloopRamp(0);
     motorTopRight.configOpenloopRamp(0.25);
     motorTopRight.configClosedloopRamp(0);
-    //-----------------❤--------------------
+    //-------------------------------------
 
     // Motors follow each other
     motorBottomLeft.follow(motorTopLeft);
